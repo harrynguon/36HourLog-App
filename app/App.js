@@ -1,25 +1,21 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Provider as PaperProvider } from 'react-native-paper';
+import HomeScreen from './screens/HomeScreen';
+import { useFonts, SourceSansPro_400Regular } from '@expo-google-fonts/source-sans-pro';
+import AppLoadingPlaceholder from 'expo/build/launch/AppLoadingPlaceholder';
+import { StatusBar } from 'expo-status-bar';
 
 export default function App() {
-	return (
-		<View style={styles.container}>
-			<Text>
-				Open up App.js to start working on your app!
-				<Text>Hi</Text>
-			</Text>
-			<StatusBar style="auto" />
-			<StatusBar style="auto" />
-		</View>
-	);
-}
+	let [fontsLoaded] = useFonts({ SourceSansPro_400Regular });
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: '#fff',
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-});
+	if (!fontsLoaded) {
+		return <AppLoadingPlaceholder />;
+	} else {
+		return (
+			<PaperProvider>
+				<HomeScreen />
+				<StatusBar style="auto" />
+			</PaperProvider>
+		);
+	}
+}
