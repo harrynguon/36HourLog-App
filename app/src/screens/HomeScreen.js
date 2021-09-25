@@ -41,9 +41,14 @@ const HomeScreen = () => {
 		let itemsCopy = [...items];
 		let referenceIndex = itemsCopy.findIndex((item) => item === listItemReference);
 		itemsCopy[referenceIndex]['description'] = text;
-		setInputText(text);
+		if (editing) {
+			setInputText(text);
+		}
 		setItems(itemsCopy);
 	};
+
+	const [addNewModalVisible, setAddNewModalVisible] = useState(false);
+	const [addNewModalText, setAddNewModalText] = useState('');
 
 	return (
 		<View style={[styles.container, styles.maxWidth]}>
@@ -97,6 +102,32 @@ const HomeScreen = () => {
 						/>
 					</Modal>
 				</Portal>
+				<Portal>
+					<Modal
+						visible={addNewModalVisible}
+						onDismiss={(event) => {
+							if (addNewModalText.trim().length >= 1) {
+								let itemsCopy = [...items];
+								itemsCopy.push({
+									description: addNewModalText,
+									expiryDate: new Date(new Date().setHours(new Date().getHours() + 36)),
+								});
+								setItems(itemsCopy);
+								setAddNewModalText('');
+							}
+							setAddNewModalVisible(false);
+						}}
+						contentContainerStyle={{ backgroundColor: 'yellow', padding: 20 }}
+					>
+						<TextInput
+							label="Add a new item"
+							value={addNewModalText}
+							onChangeText={(text) => {
+								setAddNewModalText(text);
+							}}
+						/>
+					</Modal>
+				</Portal>
 			</View>
 
 			<View style={[styles.footerContainer, styles.maxWidth]}>
@@ -107,7 +138,7 @@ const HomeScreen = () => {
 						onDismiss={onDismissSnackBar}
 						duration={3000}
 						action={{
-							label: 'Undo',
+							label: 'Yes',
 							onPress: (event) => {
 								if (snapshot !== listItemReference.description) {
 									handleUpdateText(snapshot, false);
@@ -115,26 +146,14 @@ const HomeScreen = () => {
 							},
 						}}
 					>
-						You have deleted item {'hi'}.
+						Undo changes?.
 					</Snackbar>
 				</Portal>
 				<Button
 					icon={'home'}
 					disabled={items.length >= 5}
 					onPress={(event) => {
-						let itemsCopy = [...items];
-						itemsCopy.push({
-							description: 'Hello this is first item',
-							expiryDate: new Date(new Date().setHours(new Date().getHours() + 36)),
-						});
-						// setItems([
-						// 	...items,
-						// 	{
-						// 		description: 'Hello this is first item',
-						// 		expiryDate: new Date(new Date().setHours(new Date().getHours() + 36)),
-						// 	},
-						// ]);
-						setItems(itemsCopy);
+						setAddNewModalVisible(true);
 					}}
 				>
 					Add
