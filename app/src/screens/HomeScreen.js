@@ -1,51 +1,99 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import {
 	Button,
-	Title,
-	Text,
-	List,
-	Subheading,
-	Snackbar,
-	Portal,
 	Caption,
+	List,
 	Paragraph,
+	Portal,
+	Snackbar,
+	Subheading,
+	Text,
+	Title,
 } from 'react-native-paper';
+import moment from 'moment';
+import { TouchableOpacity } from 'react-native-web';
 
 const items = [
 	{
 		title: 'First',
 		description: 'Hello this is first item',
+		momentCreated: moment(),
 	},
 	{
 		title: 'Second',
 		description: 'Yes Sir',
+		momentCreated: moment().subtract(3, 'hours'),
 	},
 	{
 		title: 'Third',
 		description: 'Testing',
+		momentCreated: moment().subtract(5, 'hours').subtract(10, 'minutes'),
 	},
 	{
 		title: 'Fourth',
 		description: 'No',
+		momentCreated: moment().subtract(7, 'hours'),
 	},
 	{
 		title: 'Fifth',
 		description: 'Hi XD',
+		momentCreated: moment().subtract(30, 'hours'),
 	},
 ];
 
-const RightSide = (props) => (
-	<View style={styles.listRightSide}>
-		<List.Icon {...props} icon={'clock'} key={Math.random()} />
-		<Text>{new Date().toLocaleTimeString()}</Text>
-	</View>
-);
+const RightSide = (props) => {
+	var now = props.momentCreated.add(36, 'hours');
+	var b = moment();
+	var diff_s = now.diff(b, 'seconds');
+	var diff_m = now.diff(b, 'minutes');
+	var diff_h = now.diff(b, 'hours');
+
+	let individualTimeUnit =
+		diff_h >= 1
+			? `${diff_h} hours remaining.`
+			: diff_m >= 1
+			? `${diff_m} minutes remaining.`
+			: `${diff_s} seconds remaining.`;
+
+	let timehhmmss = `${moment.utc(diff_s * 1000).format('HH:mm:ss')} remaining.`;
+
+	if (diff_h >= 24) {
+		let numHours = timehhmmss.split(':')[0];
+		let correctHours = (Number.parseInt(numHours) + 24).toString();
+		let numMinutes = timehhmmss.split(':')[1] ?? '00';
+		let numSeconds = timehhmmss.split(':')[2] ?? '00';
+		timehhmmss = `${correctHours}:${numMinutes}:${numSeconds}`;
+	}
+
+	let timeRemainingString = props.useTimestamp ? timehhmmss : individualTimeUnit;
+
+	return (
+		<View style={styles.listRightSide}>
+			<TouchableOpacity onPress={props.toggleTimestampFunction}>
+				<List.Icon {...props} icon={'clock-time-ten'} key={Math.random()} />
+				<Text>{timeRemainingString}</Text>
+			</TouchableOpacity>
+		</View>
+	);
+};
+
+function useToggle(initialValue = false) {
+	const [value, setValue] = useState(initialValue);
+
+	const toggle = React.useCallback(() => {
+		setValue((value) => !value);
+	}, []);
+
+	return [value, toggle];
+}
 
 const HomeScreen = () => {
 	const [visible, setVisible] = React.useState(false);
 	const onToggleSnackBar = () => setVisible(!visible);
 	const onDismissSnackBar = () => setVisible(false);
+
+	const [useTimestamp, toggleTimestamp] = useToggle(false);
 
 	return (
 		<View style={[styles.container, styles.maxWidth]}>
@@ -62,7 +110,15 @@ const HomeScreen = () => {
 						style={{ backgroundColor: 'green', width: '100%' }}
 						title={item.title}
 						description={item.description}
-						right={(props) => <RightSide props={props} key={Math.random()} />}
+						right={(props) => (
+							<RightSide
+								props={props}
+								momentCreated={item.momentCreated}
+								useTimestamp={useTimestamp}
+								toggleTimestampFunction={toggleTimestamp}
+								key={Math.random()}
+							/>
+						)}
 					/>
 				))}
 			</View>
