@@ -13,7 +13,32 @@ import {
 	TextInput,
 	Title,
 } from 'react-native-paper';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+const ListItem = ({ item, setModalVisible, setInputText, setListItemReference, setSnapshot }) => {
+	return (
+		<List.Item
+			style={[
+				{
+					backgroundColor: 'green',
+					width: '100%',
+					padding: 15,
+					margin: 3,
+				},
+			]}
+			description={item.description}
+			key={Math.random()}
+			onPress={(event) => {
+				setModalVisible(true);
+				setInputText(item.description);
+				setListItemReference(item);
+				setSnapshot(item.description);
+			}}
+			right={(props) => (
+				<RightSide props={props} expiryDate={item.expiryDate} key={Math.random()} />
+			)}
+		/>
+	);
+};
 
 const RightSide = (props) => {
 	return (
@@ -28,14 +53,13 @@ const HomeScreen = () => {
 	const [items, setItems] = useState([]);
 
 	const [snackbarVisible, setSnackbarVisible] = useState(false);
-	// const onToggleSnackBar = () => setVisible(!visible);
-	const onDismissSnackBar = () => setSnackbarVisible(false);
 
 	const [modalVisible, setModalVisible] = useState(false);
 
 	const [inputText, setInputText] = useState('');
 	const [listItemReference, setListItemReference] = useState(null);
 
+	// Before description modification
 	const [snapshot, setSnapshot] = useState();
 
 	const handleUpdateText = (text, editing = true) => {
@@ -51,118 +75,143 @@ const HomeScreen = () => {
 	const [addNewModalVisible, setAddNewModalVisible] = useState(false);
 	const [addNewModalText, setAddNewModalText] = useState('');
 
+	const [deleteItemSnapshotToRestore, setDeleteItemSnapshotToRestore] = useState(null);
+	const [deleteItemSnackbarVisible, setDeleteItemSnackbarVisible] = useState(false);
+
 	return (
-		<GestureHandlerRootView>
-			<View style={[styles.container, styles.maxWidth]}>
-				<View style={[styles.headerContainer, styles.maxWidth]}>
-					<Title style={{ textDecorationLine: 'underline' }}>36 Hour Logger</Title>
-					<Subheading>Log anything you want!</Subheading>
-					<Paragraph style={{ textAlign: 'center', fontSize: 10, fontStyle: 'italic' }}>
-						You can log up to 5 items. Swipe an item to delete it. Items are automatically
-						deleted after 36 hours.
-					</Paragraph>
-				</View>
+		<View style={[styles.container, styles.maxWidth]}>
+			<View style={[styles.headerContainer, styles.maxWidth]}>
+				<Title style={{ textDecorationLine: 'underline' }}>36 Hour Logger</Title>
+				<Subheading>Log anything you want!</Subheading>
+				<Paragraph style={{ textAlign: 'center', fontSize: 10, fontStyle: 'italic' }}>
+					You can log up to 5 items. Swipe an item to delete it. Items are automatically
+					deleted after 36 hours.
+				</Paragraph>
+			</View>
 
-				<View style={[styles.contentContainer, styles.maxWidth]}>
-					{items.map((item) => (
-						<List.Item
-							style={{
-								backgroundColor: 'green',
-								width: '100%',
-								padding: '15px',
-								margin: 3,
+			<View style={[styles.contentContainer, styles.maxWidth]}>
+				{items.map((item, index) => (
+					<ListItem
+						item={item}
+						setModalVisible={setModalVisible}
+						setInputText={setInputText}
+						setListItemReference={setListItemReference}
+						setSnapshot={setSnapshot}
+					/>
+				))}
+				<Portal>
+					<Modal
+						visible={modalVisible}
+						onDismiss={(event) => {
+							setModalVisible(false);
+							if (snapshot !== listItemReference.description) {
+								setSnackbarVisible(true);
+							}
+						}}
+						contentContainerStyle={{ backgroundColor: 'blue', padding: 20 }}
+					>
+						<TextInput
+							label="Modify Text"
+							value={inputText}
+							onChangeText={(text) => {
+								handleUpdateText(text);
 							}}
-							description={item.description}
-							onPress={(event) => {
-								setModalVisible(true);
-								setInputText(item.description);
-								setListItemReference(item);
-								setSnapshot(item.description);
-							}}
-							right={(props) => (
-								<RightSide props={props} expiryDate={item.expiryDate} key={Math.random()} />
-							)}
+							style={{ marginBottom: 20 }}
 						/>
-					))}
-					<Portal>
-						<Modal
-							visible={modalVisible}
-							onDismiss={(event) => {
-								setModalVisible(false);
-								if (snapshot !== listItemReference.description) {
-									setSnackbarVisible(true);
-								}
-							}}
-							contentContainerStyle={{ backgroundColor: 'blue', padding: 20 }}
-						>
-							<TextInput
-								label="Modify Text"
-								value={inputText}
-								onChangeText={(text) => {
-									handleUpdateText(text);
-								}}
-							/>
-						</Modal>
-					</Portal>
-					<Portal>
-						<Modal
-							visible={addNewModalVisible}
-							onDismiss={(event) => {
-								if (addNewModalText.trim().length >= 1) {
-									let itemsCopy = [...items];
-									itemsCopy.push({
-										description: addNewModalText,
-										expiryDate: new Date(new Date().setHours(new Date().getHours() + 36)),
-									});
+						<View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+							<Button
+								icon="delete"
+								color="red"
+								mode="contained"
+								style={{ marginTop: -5 }}
+								onPress={(event) => {
+									const itemToDelete = listItemReference;
+									let itemsCopy = [...items].filter((item) => item !== itemToDelete);
 									setItems(itemsCopy);
-									setAddNewModalText('');
-								}
-								setAddNewModalVisible(false);
-							}}
-							contentContainerStyle={{ backgroundColor: 'yellow', padding: 20 }}
-						>
-							<TextInput
-								label="Add a new item"
-								value={addNewModalText}
-								onChangeText={(text) => {
-									setAddNewModalText(text);
+									setDeleteItemSnapshotToRestore(itemToDelete);
+									setModalVisible(false);
+									setDeleteItemSnackbarVisible(true);
 								}}
-							/>
-						</Modal>
-					</Portal>
-				</View>
-
-				<View style={[styles.footerContainer, styles.maxWidth]}>
-					<Caption style={{ marginTop: -15, marginBottom: 15 }}>{items.length} / 5</Caption>
-					<Portal>
-						<Snackbar
-							visible={snackbarVisible}
-							onDismiss={onDismissSnackBar}
-							duration={3000}
-							action={{
-								label: 'Yes',
-								onPress: (event) => {
-									if (snapshot !== listItemReference.description) {
-										handleUpdateText(snapshot, false);
-									}
-								},
+							>
+								Delete
+							</Button>
+						</View>
+					</Modal>
+				</Portal>
+				<Portal>
+					<Modal
+						visible={addNewModalVisible}
+						onDismiss={(event) => {
+							if (addNewModalText.trim().length >= 1) {
+								let itemsCopy = [...items];
+								itemsCopy.push({
+									description: addNewModalText,
+									expiryDate: new Date(new Date().setHours(new Date().getHours() + 36)),
+								});
+								setItems(itemsCopy);
+								setAddNewModalText('');
+							}
+							setAddNewModalVisible(false);
+						}}
+						contentContainerStyle={{ backgroundColor: 'yellow', padding: 20 }}
+					>
+						<TextInput
+							label="Add a new item"
+							value={addNewModalText}
+							onChangeText={(text) => {
+								setAddNewModalText(text);
 							}}
-						>
-							Undo changes?.
-						</Snackbar>
-					</Portal>
-					<Button
-						icon={'home'}
-						disabled={items.length >= 5}
-						onPress={(event) => {
-							setAddNewModalVisible(true);
+						/>
+					</Modal>
+				</Portal>
+			</View>
+
+			<View style={[styles.footerContainer, styles.maxWidth]}>
+				<Caption style={{ marginTop: -15, marginBottom: 15 }}>{items.length} / 5</Caption>
+				<Portal>
+					<Snackbar
+						visible={snackbarVisible}
+						onDismiss={(event) => setSnackbarVisible(false)}
+						duration={3000}
+						action={{
+							label: 'Yes',
+							onPress: (event) => {
+								if (snapshot !== listItemReference.description) {
+									handleUpdateText(snapshot, false);
+								}
+							},
 						}}
 					>
-						Add
-					</Button>
-				</View>
+						Undo changes?
+					</Snackbar>
+					<Snackbar
+						visible={deleteItemSnackbarVisible}
+						onDismiss={(event) => setDeleteItemSnackbarVisible(false)}
+						duration={3000}
+						action={{
+							label: 'Yes',
+							onPress: (event) => {
+								let itemsCopy = [...items];
+								itemsCopy.push(deleteItemSnapshotToRestore);
+								itemsCopy = itemsCopy.sort((a, b) => a.expiryDate - b.expiryDate);
+								setItems(itemsCopy);
+							},
+						}}
+					>
+						Undo deletion?
+					</Snackbar>
+				</Portal>
+				<Button
+					icon={'home'}
+					disabled={items.length >= 5}
+					onPress={(event) => {
+						setAddNewModalVisible(true);
+					}}
+				>
+					Add
+				</Button>
 			</View>
-		</GestureHandlerRootView>
+		</View>
 	);
 };
 

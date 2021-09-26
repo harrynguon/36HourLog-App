@@ -20,7 +20,7 @@ export default function App() {
 		return (
 			<PaperProvider>
 				<HomeScreen />
-				<StatusBar style="auto" />
+				{/*<StatusBar style="auto" />*/}
 			</PaperProvider>
 		);
 	}
