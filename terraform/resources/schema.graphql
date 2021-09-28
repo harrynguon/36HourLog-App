@@ -1,107 +1,45 @@
-﻿schema {
-  query: Query
+﻿# Use subscriptions for large objects, small changes or extremely low latency apps
+
+schema {
+  query: Query,
   mutation: Mutation
-  subscription: Subscription
 }
 
-type Mutation {
-  createHoursappmodel(input: CreateHoursappmodelInput!): hoursappmodel
-  deleteHoursappmodel(input: DeleteHoursappmodelInput!): hoursappmodel
-  updateHoursappmodel(input: UpdateHoursappmodelInput!): hoursappmodel
+type Item {
+  DeviceID: String!
+  ExpiryDate: String!,
+  Description: String
 }
 
-type Query {
-  getHoursappmodel(Description: String!, ExpiryDate: String!): hoursappmodel
-  listHoursappmodels(filter: TableHoursappmodelFilterInput, limit: Int, nextToken: String): hoursappmodelConnection
-}
-
-type Subscription {
-  onCreateHoursappmodel(Description: String, ExpiryDate: String): hoursappmodel @aws_subscribe(mutations : ["createHoursappmodel"])
-  onDeleteHoursappmodel(Description: String, ExpiryDate: String): hoursappmodel @aws_subscribe(mutations : ["deleteHoursappmodel"])
-  onUpdateHoursappmodel(Description: String, ExpiryDate: String): hoursappmodel @aws_subscribe(mutations : ["updateHoursappmodel"])
-}
-
-type hoursappmodel {
-  Description: String!
-  ExpiryDate: String!
-}
-
-type hoursappmodelConnection {
-  items: [hoursappmodel]
+type ItemConnection {
+  items: [Item]
   nextToken: String
 }
 
-input CreateHoursappmodelInput {
-  Description: String!
-  ExpiryDate: String!
+type Query {
+  getItem(DeviceID: String!, ExpiryDate: String!): Item
+  listItems(filter: TableItemFilterInput, limit: Int, nextToken: String): ItemConnection
 }
 
-input DeleteHoursappmodelInput {
-  Description: String!
-  ExpiryDate: String!
+type Mutation {
+  createItem(DeviceID: String!, ExpiryDate: String!, Description: String!): Item
+  updateItem(DeviceID: String!, Description: String!): Item
+  deleteItem(DeviceID: String!, Description: String): Item
 }
 
-input TableBooleanFilterInput {
-  eq: Boolean
-  ne: Boolean
-}
-
-input TableFloatFilterInput {
-  between: [Float]
-  contains: Float
-  eq: Float
-  ge: Float
-  gt: Float
-  le: Float
-  lt: Float
-  ne: Float
-  notContains: Float
-}
-
-input TableHoursappmodelFilterInput {
-  Description: TableStringFilterInput
-  ExpiryDate: TableStringFilterInput
-}
-
-input TableIDFilterInput {
-  beginsWith: ID
-  between: [ID]
-  contains: ID
-  eq: ID
-  ge: ID
-  gt: ID
-  le: ID
-  lt: ID
-  ne: ID
-  notContains: ID
-}
-
-input TableIntFilterInput {
-  between: [Int]
-  contains: Int
-  eq: Int
-  ge: Int
-  gt: Int
-  le: Int
-  lt: Int
-  ne: Int
-  notContains: Int
+input TableItemFilterInput {
+  DeviceID: TableStringFilterInput
 }
 
 input TableStringFilterInput {
-  beginsWith: String
-  between: [String]
-  contains: String
+  ne: String
   eq: String
-  ge: String
-  gt: String
   le: String
   lt: String
-  ne: String
+  ge: String
+  gt: String
+  contains: String
   notContains: String
-}
-
-input UpdateHoursappmodelInput {
-  Description: String!
-  ExpiryDate: String!
+  between: [String]
+  beginsWith: String
 }
