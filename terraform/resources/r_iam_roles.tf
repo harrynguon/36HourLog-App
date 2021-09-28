@@ -28,13 +28,22 @@ resource "aws_iam_role_policy" "role_policy_appsync" {
   "Version": "2012-10-17",
   "Statement": [
     {
+      "Effect": "Allow",
       "Action": [
         "dynamodb:*"
       ],
-      "Effect": "Allow",
       "Resource": [
         "${aws_dynamodb_table.main_table.arn}"
       ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+      ],
+      "Resource": "*"
     }
   ]
 }
