@@ -138,7 +138,8 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+.terraform/
 
 # JB files
-*/.idea
-*/.idea/*
+.idea/
+.terraform.lock.hcl
