@@ -12,7 +12,7 @@ $LambdaName = "36-hours-resolver-lambda"
 # Set path to the location of the script
 Push-Location $PSScriptRoot
 
-aws-vault exec harry -- dotnet lambda deploy-function -fms 128 -ft 10 -fn $LambdaName
+aws-vault exec harry -- -- dotnet lambda deploy-function -fms 128 -ft 10 -fn $LambdaName
 
 Write-Host "The Lambda has been updated!"
 Pop-Location

@@ -28,10 +28,10 @@ resource "aws_iam_role_policy" "role_policy_appsync" {
       {
         "Effect": "Allow",
         "Action": [
-          "dynamodb:*"
+          "lambda:InvokeFunction"
         ],
         "Resource": [
-          aws_dynamodb_table.main_table.arn
+          aws_lambda_function.lambda_appsync_resolver.arn
         ]
       },
       {
@@ -47,7 +47,7 @@ resource "aws_iam_role_policy" "role_policy_appsync" {
   })
 }
 
-resource "aws_iam_role" "role_appsync_resolver_lambda" {
+resource "aws_iam_role" "role_resolver_lambda" {
   name = "${var.app_name}-lambda-resolver-role"
 
   assume_role_policy = jsonencode({
@@ -67,9 +67,9 @@ resource "aws_iam_role" "role_appsync_resolver_lambda" {
   tags = var.tags
 }
 
-resource "aws_iam_role_policy" "role_policy_appsync_resolver_lambda" {
-  name = "${var.app_name}-role-policy-appsync-resolver-lambda"
-  role = aws_iam_role.role_appsync_resolver_lambda.id
+resource "aws_iam_role_policy" "role_policy_resolver_lambda" {
+  name = "${var.app_name}-role-policy-resolver-lambda"
+  role = aws_iam_role.role_resolver_lambda.id
 
   policy = jsonencode({
     "Version": "2012-10-17",
@@ -80,7 +80,7 @@ resource "aws_iam_role_policy" "role_policy_appsync_resolver_lambda" {
           "lambda:InvokeFunction"
         ],
         "Resource": [
-          "*"
+          aws_lambda_function.lambda_appsync_resolver.arn
         ]
       },
       {
@@ -101,8 +101,8 @@ resource "aws_iam_role_policy" "role_policy_appsync_resolver_lambda" {
         "Effect": "Allow",
         "Action": [
           "logs:CreateLogStream",
-          "logs:PutLogEvents",
-          "logs:CreateLogGroup"
+          "logs:CreateLogGroup",
+          "logs:PutLogEvents"
         ],
         "Resource": "arn:aws:logs:${var.region}:${var.account_id}:*"
       }

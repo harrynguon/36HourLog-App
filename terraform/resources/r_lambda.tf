@@ -7,7 +7,7 @@ resource "aws_lambda_function" "lambda_appsync_resolver" {
   s3_bucket = "terraform-states-hub"
   s3_key = "lambda_placeholder.zip"
 
-  role = aws_iam_role.role_appsync_resolver_lambda.arn
+  role = aws_iam_role.role_resolver_lambda.arn
 
   timeout = 10
 
