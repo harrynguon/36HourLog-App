@@ -1,0 +1,4 @@
+1)
+dotnet lambda deploy-function
+2)
+Ensure to specify exact name as the name provisioned from AWS Lambda in Terraform

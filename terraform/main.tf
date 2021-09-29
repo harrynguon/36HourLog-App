@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = "terraform-states-hub"
-    key    = "projects/36-hours/terraform.tfstate"
+    key    = "projects/36-hours/terraform/terraform.tfstate"
     region = "ap-southeast-2"
   }
 
@@ -24,5 +24,10 @@ provider "aws" {
 
 module "api" {
   source = ".//resources"
+
+  account_id = var.account_id
+  region = "ap-southeast-2"
+
   app_name = var.app_name
+
 }
