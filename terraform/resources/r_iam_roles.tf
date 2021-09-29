@@ -15,6 +15,7 @@ resource "aws_iam_role" "role_appsync" {
     ]
   })
 
+  tags = var.tags
 }
 
 // AppSync Role Policy for DynamoDB actions and CloudWatch events
@@ -63,6 +64,7 @@ resource "aws_iam_role" "role_appsync_resolver_lambda" {
     ]
   })
 
+  tags = var.tags
 }
 
 resource "aws_iam_role_policy" "role_policy_appsync_resolver_lambda" {

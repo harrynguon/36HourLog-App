@@ -10,6 +10,7 @@ resource "aws_appsync_graphql_api" "api" {
     exclude_verbose_content = true
   }
 
+  tags = var.tags
 }
 
 resource "aws_appsync_datasource" "api_datasource" {

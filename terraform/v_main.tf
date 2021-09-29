@@ -7,3 +7,12 @@ variable "app_name" {
   default = "36-hours"
 }
 
+variable "tags" {
+  type = map(string)
+
+  default = {
+    Owner = "Harry"
+    AppName = "36-hours-app"
+    ManagedBy = "Terraform"
+  }
+}

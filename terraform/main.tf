@@ -30,4 +30,5 @@ module "api" {
 
   app_name = var.app_name
 
+  tags = var.tags
 }

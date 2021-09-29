@@ -20,4 +20,5 @@ resource "aws_dynamodb_table" "main_table" {
     enabled = true
   }
 
+  tags = var.tags
 }

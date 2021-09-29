@@ -14,3 +14,7 @@ variable "attributes" {
   type = list(string)
   default = ["DeviceID", "ExpiryDate"]
 }
+
+variable "tags" {
+  type = map(string)
+}
