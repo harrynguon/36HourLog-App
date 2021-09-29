@@ -1,3 +1,5 @@
+############################################# Node
+
 # Logs
 logs
 *.log
@@ -103,6 +105,7 @@ dist
 # TernJS port file
 .tern-port
 
+################################### Terraform
 
 # Local .terraform directories
 **/.terraform/*
@@ -139,7 +142,53 @@ override.tf.json
 .terraformrc
 terraform.rc
 .terraform/
+.terraform.lock.hcl
+
+
+######################################## .idea
 
 # JB files
 .idea/
-.terraform.lock.hcl
+
+
+######################################### .NET CORE Lambda
+
+######################################
+# Visual Studio per-user settings data
+######################################
+*.suo
+*.user
+
+####################
+# Build/Test folders
+####################
+**/.vs/
+**/bin/
+**/obj/
+**/TestResults/
+**/Temp/
+**/NuGet.exe
+**/buildlogs/
+**/Deployment/
+**/packages
+**/launchSettings.json
+**/Debug/
+
+**/project.lock.json
+
+**/.vscode
+**/.idea
+*.userprefs
+
+**/.ionide/**
+
+/Tools/LambdaTestTool/Amazon.Lambda.TestTool/ExternalCommands/App/**
+
+**/node_modules/
+**/TestGenerations/
+/Blueprints/YeomanGenerator/generator-aws-lambda-dotnet/Blueprints/**
+/Blueprints/YeomanGenerator/generator-aws-lambda-dotnet/app/manifest.js
+/Tools/LambdaTestTool/Amazon.Lambda.TestTool/ExternalCommands/App
+global.json
+
+**/cdk.out/**
