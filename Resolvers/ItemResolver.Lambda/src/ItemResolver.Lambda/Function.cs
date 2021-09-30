@@ -1,12 +1,12 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.Json;
-using System.Text.Json.Serialization;
+using Amazon;
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DataModel;
 using Amazon.Lambda.Core;
+using Amazon.Runtime;
 using ItemResolver.Lambda.Model;
-using ItemResolver.Lambda.Response;
-using Newtonsoft.Json.Linq;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
@@ -16,6 +16,7 @@ namespace ItemResolver.Lambda
     public class Function
     {
         private IDictionary Environment = System.Environment.GetEnvironmentVariables();
+        private AmazonDynamoDBClient _dynamoDbClient;
 
         /// <summary>
         /// AppSync Lambda Resolver
@@ -26,63 +27,40 @@ namespace ItemResolver.Lambda
         public Response FunctionHandler(AppSyncInput input, ILambdaContext context)
         {
             LambdaLogger.Log(JsonSerializer.Serialize(input));
+            var credentials =
+                new BasicAWSCredentials("1", "2");
+            var config = new AmazonDynamoDBConfig
+            {
+                RegionEndpoint = RegionEndpoint.APSoutheast2
+            };
+            _dynamoDbClient = new AmazonDynamoDBClient(credentials, config);
+            
+            var dynamoDbContext = new DynamoDBContext(_dynamoDbClient);
+
+            var items = dynamoDbContext.QueryAsync<Item>("asdkl2lk3m2").GetRemainingAsync().Result;
+
+            foreach (var item in items)
+            {
+                LambdaLogger.Log(item.Description);
+                LambdaLogger.Log(item.DeviceId);
+                LambdaLogger.Log(item.ExpiryDate);
+                LambdaLogger.Log(item.NextToken ?? "nexttoken is null");
+            }
 
             var arguments = input.Arguments;
 
             // Operation
             var field = input.Info.FieldName;
-            LambdaLogger.Log(field);
-            LambdaLogger.Log(Queries.GetItems);
             switch (field)
             {
-                case Queries.GetItems :
-                    // LambdaLogger.Log(JsonSerializer.Serialize(new Response()
-                    // {
-                    //     DeviceId = "123",
-                    //     ExpiryDate = "456",
-                    //     Description = "789",
-                    //     HIII = new Item
-                    //     {
-                    //         DeviceId = "sdfgdsgds",
-                    //         ExpiryDate = "45dfgfd6",
-                    //         Description = "7cvbcvb89",
-                    //     }
-                    // }));
-                // {
-                //     "HIII": {
-                //         "Description": "7cvbcvb89",
-                //         "DeviceID": "sdfgdsgds",
-                //         "ExpiryDate": "45dfgfd6",
-                //         "items": null,
-                //         "nextToken": null
-                //     },
-                //     "Description": "789",
-                //     "DeviceID": "123",
-                //     "ExpiryDate": "456",
-                //     "items": null,
-                //     "nextToken": null
-                // }
+                case Queries.GetItem :
                     return new Response()
                     {
                         DeviceId = "123",
                         ExpiryDate = "456",
                         Description = "789"
                     };
-                
                 case Queries.ListItems :
-                    LambdaLogger.Log(JsonSerializer.Serialize(new Response()
-                    {
-                        Items = new List<Item>()
-                        {
-                            new Response()
-                            {
-                            DeviceId = "xcvxcvsd",
-                            ExpiryDate = "xcvdfgb",
-                            Description = "dfhbf"
-                            }
-                        },
-                        NextToken = "Yes"
-                    }));
                     return new Response()
                     {
                         Items = new List<Item>()
@@ -107,12 +85,6 @@ namespace ItemResolver.Lambda
             }
 
             return new Response();
-        }
-
-
-        private string FlattenAndReturnJson(JObject objectt)
-        {
-            return "hi";
         }
 
         public class Response : Item

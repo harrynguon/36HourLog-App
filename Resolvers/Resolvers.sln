@@ -4,6 +4,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemResolver.Lambda", "Item
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemResolver.Lambda.Tests", "ItemResolver.Lambda\test\ItemResolver.Lambda.Tests\ItemResolver.Lambda.Tests.csproj", "{2151ACAB-33D1-4248-A552-CD8CA96126BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemResolver.Infrastructure", "ItemResolver.Infrastructure\ItemResolver.Infrastructure.csproj", "{65B052B0-325B-43E7-A3CB-9A9B8B6F33DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemResolver.Lambda.Core", "ItemResolver.Lambda.Core\ItemResolver.Lambda.Core.csproj", "{870426E4-537F-4F2A-BF0A-156954A7795A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,13 @@ Global
 		{2151ACAB-33D1-4248-A552-CD8CA96126BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2151ACAB-33D1-4248-A552-CD8CA96126BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2151ACAB-33D1-4248-A552-CD8CA96126BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65B052B0-325B-43E7-A3CB-9A9B8B6F33DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65B052B0-325B-43E7-A3CB-9A9B8B6F33DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65B052B0-325B-43E7-A3CB-9A9B8B6F33DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65B052B0-325B-43E7-A3CB-9A9B8B6F33DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{870426E4-537F-4F2A-BF0A-156954A7795A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{870426E4-537F-4F2A-BF0A-156954A7795A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{870426E4-537F-4F2A-BF0A-156954A7795A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{870426E4-537F-4F2A-BF0A-156954A7795A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

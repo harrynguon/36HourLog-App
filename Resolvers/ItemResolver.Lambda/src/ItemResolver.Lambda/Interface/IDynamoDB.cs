@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using ItemResolver.Lambda.Response;
+using ItemResolver.Lambda.Model;
 
 namespace ItemResolver.Lambda.Interface
 {
-    public interface IDynamoDB
+    public interface IDynamoDb
     {
         Item GetItem();
         
