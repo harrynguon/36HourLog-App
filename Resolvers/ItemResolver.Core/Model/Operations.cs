@@ -1,4 +1,4 @@
-namespace ItemResolver.Lambda.Model
+namespace ItemResolver.Core.Model
 {
     public static class Queries
     {

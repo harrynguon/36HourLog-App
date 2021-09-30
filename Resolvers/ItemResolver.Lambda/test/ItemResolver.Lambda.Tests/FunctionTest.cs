@@ -6,7 +6,6 @@ using Xunit;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.TestUtilities;
 using ItemResolver.Lambda;
-using ItemResolver.Lambda.Model;
 
 namespace ItemResolver.Lambda.Tests
 {

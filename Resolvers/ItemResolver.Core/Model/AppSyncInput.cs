@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ItemResolver.Lambda.Model
+namespace ItemResolver.Core.Model
 {
     public class AppSyncInput
     {

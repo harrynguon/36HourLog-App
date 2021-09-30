@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemResolver.Lambda.Tests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemResolver.Infrastructure", "ItemResolver.Infrastructure\ItemResolver.Infrastructure.csproj", "{65B052B0-325B-43E7-A3CB-9A9B8B6F33DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemResolver.Lambda.Core", "ItemResolver.Lambda.Core\ItemResolver.Lambda.Core.csproj", "{870426E4-537F-4F2A-BF0A-156954A7795A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemResolver.Core", "ItemResolver.Core\ItemResolver.Core.csproj", "{870426E4-537F-4F2A-BF0A-156954A7795A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

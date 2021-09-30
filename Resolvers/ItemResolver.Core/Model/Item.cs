@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using Amazon.DynamoDBv2.DataModel;
 
-namespace ItemResolver.Lambda.Model
+namespace ItemResolver.Core.Model
 {
     [DynamoDBTable("36-hours-table")]
     public class Item

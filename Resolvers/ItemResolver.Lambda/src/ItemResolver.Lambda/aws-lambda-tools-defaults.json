@@ -10,7 +10,7 @@
   "configuration": "Release",
   "framework": "netcoreapp3.1",
   "function-runtime": "dotnetcore3.1",
-  "function-memory-size": 256,
-  "function-timeout": 30,
+  "function-memory-size": 128,
+  "function-timeout": 20,
   "function-handler": "ItemResolver.Lambda::ItemResolver.Lambda.Function::FunctionHandler"
 }

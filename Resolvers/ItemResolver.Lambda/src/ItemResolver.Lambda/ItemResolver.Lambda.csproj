@@ -10,6 +10,11 @@
         <PackageReference Include="Amazon.Lambda.Core" Version="2.0.0" />
         <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.1.0" />
         <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.0.74" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
         <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\ItemResolver.Core\ItemResolver.Core.csproj" />
+      <ProjectReference Include="..\..\..\ItemResolver.Infrastructure\ItemResolver.Infrastructure.csproj" />
     </ItemGroup>
 </Project>
