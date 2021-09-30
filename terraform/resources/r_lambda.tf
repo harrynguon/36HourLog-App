@@ -9,7 +9,7 @@ resource "aws_lambda_function" "lambda_appsync_resolver" {
 
   role = aws_iam_role.role_resolver_lambda.arn
 
-  timeout = 10
+  timeout = 20
 
   tags = var.tags
 }

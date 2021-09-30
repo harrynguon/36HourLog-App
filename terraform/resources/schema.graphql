@@ -1,30 +1,30 @@
 ﻿# Use subscriptions for large objects, small changes or extremely low latency apps
-
 schema {
-  query: Query,
+  query: Query
   mutation: Mutation
+}
+
+type Query {
+  getItem(input: AllFieldsInput): Item
+  listItems(filter: TableItemFilterInput): [Item]!
+}
+
+type Mutation {
+  createItem(input: AllFieldsInput): Item
+  updateItem(input: AllFieldsInput): Item
+  deleteItem(input: AllFieldsInput): Item
 }
 
 type Item {
   DeviceID: String!
-  ExpiryDate: String!,
+  ExpiryDate: String!
   Description: String
 }
 
-type ItemConnection {
-  items: [Item]
-  nextToken: String
-}
-
-type Query {
-  getItem(DeviceID: String!, ExpiryDate: String!): Item
-  listItems(filter: TableItemFilterInput, limit: Int, nextToken: String): ItemConnection
-}
-
-type Mutation {
-  createItem(DeviceID: String!, ExpiryDate: String!, Description: String!): Item
-  updateItem(DeviceID: String!, Description: String!): Item
-  deleteItem(DeviceID: String!, Description: String): Item
+input AllFieldsInput {
+  DeviceID: String!
+  ExpiryDate: String!
+  Description: String!
 }
 
 input TableItemFilterInput {
@@ -34,12 +34,4 @@ input TableItemFilterInput {
 input TableStringFilterInput {
   ne: String
   eq: String
-  le: String
-  lt: String
-  ge: String
-  gt: String
-  contains: String
-  notContains: String
-  between: [String]
-  beginsWith: String
 }
