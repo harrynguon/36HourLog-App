@@ -1,0 +1,56 @@
+ListItems
+
+{
+    "arguments": {
+        "filter": {
+            "DeviceID": {
+                "eq": "2014"
+            }
+        }
+    },
+    "identity": null,
+    "source": null,
+    "request": {...},
+    "prev": null,
+    "info": {
+        "selectionSetList": [
+            "Description",
+            "DeviceID",
+            "ExpiryDate"
+        ],
+        "selectionSetGraphQL": "{\n  Description\n  DeviceID\n  ExpiryDate\n}",
+        "parentTypeName": "Query",
+        "fieldName": "listItems",
+        "variables": {}
+    },
+    "stash": {}
+}
+
+
+GetItem
+
+{
+    "arguments": {
+        "input": {
+            "DeviceID": "cxv23233",
+            "ExpiryDate": "2020",
+            "Description": "asdsd"
+        }
+    },
+    "identity": null,
+    "source": null,
+    "request": {...},
+    "prev": null,
+    "info": {
+        "selectionSetList": [
+            "Description",
+            "DeviceID",
+            "ExpiryDate"
+        ],
+        "selectionSetGraphQL": "{\n  Description\n  DeviceID\n  ExpiryDate\n}",
+        "parentTypeName": "Query",
+        "fieldName": "getItem",
+        "variables": {}
+    },
+    "stash": {}
+}

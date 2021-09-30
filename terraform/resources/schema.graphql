@@ -6,7 +6,7 @@ schema {
 
 type Query {
   getItem(input: AllFieldsInput): Item
-  listItems(filter: TableItemFilterInput): [Item]!
+  listItems(filter: TableItemFilterInput): ItemList
 }
 
 type Mutation {
@@ -19,6 +19,10 @@ type Item {
   DeviceID: String!
   ExpiryDate: String!
   Description: String
+}
+
+type ItemList {
+  Items: [Item]!
 }
 
 input AllFieldsInput {

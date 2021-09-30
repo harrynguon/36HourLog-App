@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using Amazon.DynamoDBv2.DataModel;
 
@@ -10,22 +11,23 @@ namespace ItemResolver.Core.Model
         [DynamoDBHashKey("DeviceID")]
         [DynamoDBProperty("DeviceID")]
         [JsonPropertyName("DeviceID")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string DeviceId { get; set; }
         
         [DynamoDBRangeKey]
         [DynamoDBProperty]
         [JsonPropertyName("ExpiryDate")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string ExpiryDate { get; set; }
         
         [DynamoDBProperty]
         [JsonPropertyName("Description")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Description { get; set; }
         
-        // ItemConnection Result
-        [JsonPropertyName("items")]
+        // Result for the listItems query
+        [JsonPropertyName("Items")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<Item> Items { get; set; }
-        
-        [JsonPropertyName("nextToken")]
-        public string NextToken { get; set; }
     }
 }

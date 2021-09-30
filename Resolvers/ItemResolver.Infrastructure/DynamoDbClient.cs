@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.Internal;
 using Amazon.Lambda.Core;
 using Amazon.Runtime;
 using ItemResolver.Core.Interface;
 using ItemResolver.Core.Model;
+using Filter = ItemResolver.Core.Model.Filter;
 
 namespace ItemResolver.Infrastructure
 {
@@ -34,21 +37,34 @@ namespace ItemResolver.Infrastructure
             _context = new DynamoDBContext(_client);
         }
         
-        public async Task<List<Item>> GetItem(string key)
+        public async Task<Item> GetItem(Input inputArguments)
         {
-            return await _context.QueryAsync<Item>(key).GetRemainingAsync();
+            var items = await _context.QueryAsync<Item>(inputArguments.DeviceID)
+                .GetRemainingAsync();
+            return items.FirstOrDefault(item => (item.Description == inputArguments.Description));
         }
 
-        public async Task<List<Item>> ListItems()
+        public async Task<List<Item>> ListItems(Filter filterArguments)
         {
+            // TODO: Look into scan conditions
             var scanConditions = new List<ScanCondition>();
             {
-                // new ScanCondition
-                // {
-                //     
-                // }
             }
-            return await _context.ScanAsync<Item>(scanConditions).GetRemainingAsync();
+            var resultsUnfiltered = await _context.ScanAsync<Item>(scanConditions).GetRemainingAsync();
+            var resultsFiltered = new List<Item>();
+
+            if (!string.IsNullOrEmpty(filterArguments.DeviceIdFilter.Equals))
+            {
+                resultsFiltered =
+                    resultsUnfiltered.Where(item => item.DeviceId == filterArguments.DeviceIdFilter.Equals).ToList();
+            }
+            else
+            {
+                resultsFiltered =
+                    resultsUnfiltered.Where(item => item.DeviceId != filterArguments.DeviceIdFilter.NotEquals).ToList();
+            }
+            
+            return resultsFiltered;
         }
     }
 }

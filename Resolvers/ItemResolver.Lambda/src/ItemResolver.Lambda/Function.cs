@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Authentication.ExtendedProtection;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
@@ -27,12 +28,12 @@ namespace ItemResolver.Lambda
         /// <param name="input"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public string FunctionHandler(Object input, ILambdaContext context)
+        public App.Response FunctionHandler(AppSyncEvent input, ILambdaContext context)
         {
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
             var serviceProvider = serviceCollection.BuildServiceProvider();
-            return serviceProvider.GetService<App>()?.Run(input, context);
+            return serviceProvider.GetService<App>()?.Run(input, context).Result;
         }
 
         /// <summary>
