@@ -31,14 +31,10 @@ namespace ItemResolver.Lambda
         /// <returns></returns>
         public App.Response FunctionHandler(AppSyncEvent input, ILambdaContext context)
         {
-
-            var configurationBuilder = new ConfigurationBuilder();
-
-            string cred = Environment.GetEnvironmentVariable("ProgrammaticAccess");
-            
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
             var serviceProvider = serviceCollection.BuildServiceProvider();
+            
             return serviceProvider.GetService<App>()?.Run(input, context).Result;
         }
 
