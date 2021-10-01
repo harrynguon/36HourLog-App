@@ -32,6 +32,10 @@ namespace ItemResolver.Core
             {
                 case Queries.GetItem:
                     var item = await _dynamoDbClient.GetItem(arguments.Input);
+                    if (item == null)
+                    {
+                        return null;
+                    }
                     return new Response()
                     {
                         DeviceId = item.DeviceId,

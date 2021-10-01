@@ -1,6 +1,7 @@
 resource "aws_lambda_function" "lambda_appsync_resolver" {
   function_name = "${var.app_name}-resolver-lambda"
-  # From template lambda tools default
+
+  # Get handler name from template lambda tools defaults json
   handler = "ItemResolver.Lambda::ItemResolver.Lambda.Function::FunctionHandler"
   runtime = "dotnetcore3.1"
 

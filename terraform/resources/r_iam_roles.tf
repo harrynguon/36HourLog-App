@@ -106,6 +106,13 @@ resource "aws_iam_role_policy" "role_policy_resolver_lambda" {
           "logs:PutLogEvents"
         ],
         "Resource": "arn:aws:logs:${var.region}:${var.account_id}:*"
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
+          "ssm:GetParametersByPath"
+        ],
+        "Resource": "arn:aws:ssm:${var.region}:${var.account_id}:parameter/"
       }
     ]
   })

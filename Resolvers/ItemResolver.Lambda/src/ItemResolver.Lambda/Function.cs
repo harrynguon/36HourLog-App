@@ -13,6 +13,7 @@ using ItemResolver.Core;
 using ItemResolver.Core.Interface;
 using ItemResolver.Core.Model;
 using ItemResolver.Infrastructure;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
@@ -30,6 +31,11 @@ namespace ItemResolver.Lambda
         /// <returns></returns>
         public App.Response FunctionHandler(AppSyncEvent input, ILambdaContext context)
         {
+
+            var configurationBuilder = new ConfigurationBuilder();
+
+            string cred = Environment.GetEnvironmentVariable("ProgrammaticAccess");
+            
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
             var serviceProvider = serviceCollection.BuildServiceProvider();
@@ -42,9 +48,12 @@ namespace ItemResolver.Lambda
         /// <param name="serviceCollection"></param>
         public static void ConfigureServices(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped<IDynamoDbClient, DynamoDbClient>();
             serviceCollection.AddTransient<App>();
+            serviceCollection.AddScoped<IDynamoDbClient, DynamoDbClient>();
+            serviceCollection.AddSingleton<IConfigurationService, ConfigurationService>();
         }
 
     }
+
+    
 }

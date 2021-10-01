@@ -12,6 +12,7 @@ using Amazon.Lambda.Core;
 using Amazon.Runtime;
 using ItemResolver.Core.Interface;
 using ItemResolver.Core.Model;
+using Microsoft.Extensions.Configuration;
 using Filter = ItemResolver.Core.Model.Filter;
 
 namespace ItemResolver.Infrastructure
@@ -19,13 +20,21 @@ namespace ItemResolver.Infrastructure
     public class DynamoDbClient : IDynamoDbClient
     {
 
+        private readonly IConfigurationService _configurationService;
+
         private AmazonDynamoDBClient _client;
         private DynamoDBContext _context;
 
-        public DynamoDbClient()
+        public DynamoDbClient(IConfigurationService configurationService)
         {
+            _configurationService = configurationService;
+
+            var key = _configurationService.GetConfiguration()
+                .GetValue<string>("ProgrammaticAccess")
+                .Split(":");
+            
             var credentials =
-                new BasicAWSCredentials("1", "2");
+                new BasicAWSCredentials(key[0], key[1]);
             var config = new AmazonDynamoDBConfig
             {
                 RegionEndpoint = RegionEndpoint.APSoutheast2
