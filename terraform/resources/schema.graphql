@@ -5,14 +5,14 @@ schema {
 }
 
 type Query {
-  getItem(input: AllFieldsInput): Item
+  getItem(input: AllFieldsInput!): Item
   listItems(filter: TableItemFilterInput): ItemList
 }
 
 type Mutation {
-  createItem(input: AllFieldsInput): Item
-  updateItem(input: AllFieldsInput): Item
-  deleteItem(input: AllFieldsInput): Item
+  createItem(input: AllFieldsInput!): Item
+  updateItem(input: AllFieldsInput!): Item
+  deleteItem(input: AllFieldsInput!): Item
 }
 
 type Item {
