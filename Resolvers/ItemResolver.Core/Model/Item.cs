@@ -1,3 +1,4 @@
+#nullable enable
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
@@ -12,22 +13,22 @@ namespace ItemResolver.Core.Model
         [DynamoDBProperty("DeviceID")]
         [JsonPropertyName("DeviceID")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string DeviceId { get; set; }
+        public string? DeviceId { get; set; }
         
         [DynamoDBRangeKey]
         [DynamoDBProperty]
         [JsonPropertyName("ExpiryDate")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string ExpiryDate { get; set; }
+        public string? ExpiryDate { get; set; }
         
         [DynamoDBProperty]
         [JsonPropertyName("Description")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string Description { get; set; }
+        public string? Description { get; set; }
         
         // Result for the listItems query
         [JsonPropertyName("Items")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<Item> Items { get; set; }
+        protected List<Item>? Items { get; set; }
     }
 }

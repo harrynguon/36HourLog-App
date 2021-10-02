@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Amazon;
@@ -32,37 +33,46 @@ namespace ItemResolver.Core
             {
                 case Queries.GetItem:
                     var item = await _dynamoDbClient.GetItem(arguments.Input);
-                    if (item == null)
-                    {
-                        return null;
-                    }
-                    return new Response()
-                    {
-                        DeviceId = item.DeviceId,
-                        ExpiryDate = item.ExpiryDate,
-                        Description = item.Description
-                    };
-                
+                    return item == null ? null : new Response(item, input.Info.SelectionSetGraphQL);
+
                 case Queries.ListItems:
                     var items = await _dynamoDbClient.ListItems(arguments.Filter);
-                    return new Response()
-                    {
-                        Items = items
-                    };
+                    return new Response(items, input.Info.SelectionSetGraphQL);
                 case Mutations.CreateItem: 
                     break;
                 case Mutations.UpdateItem: 
                     break;
                 case Mutations.DeleteItem: 
                     break;
-                default: return null;
             }
             
-            return new Response();
+            return null;
         }
 
         public class Response : Item
         {
+            
+            public Response() {}
+
+            public Response(Item item, string returnSet)
+            {
+                DeviceId = returnSet.Contains("DeviceID") ? item.DeviceId : null;
+                ExpiryDate = returnSet.Contains("ExpiryDate") ? item.ExpiryDate : null;
+                Description = returnSet.Contains("Description") ? item.Description : null;
+            }
+
+            public Response(IEnumerable<Item> items, string returnSet)
+            {
+                var filteredList = items.Select(item => new Item
+                    {
+                        DeviceId = returnSet.Contains("DeviceID") ? item.DeviceId : null,
+                        ExpiryDate = returnSet.Contains("ExpiryDate") ? item.ExpiryDate : null,
+                        Description = returnSet.Contains("Description") ? item.Description : null
+                    })
+                .ToList();
+                Items = filteredList.Count > 0 ? filteredList : new List<Item>();
+            }
+            
         }
     }
 }

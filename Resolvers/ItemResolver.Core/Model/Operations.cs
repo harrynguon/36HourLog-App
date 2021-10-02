@@ -12,4 +12,10 @@ namespace ItemResolver.Core.Model
         public const string DeleteItem = "deleteItem";
         public const string UpdateItem = "updateItem";
     }
+
+    public static class Operators
+    {
+        public const string Equals = "EQ";
+        public const string NotEquals = "NE";
+    }
 }

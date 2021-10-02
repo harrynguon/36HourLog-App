@@ -55,22 +55,30 @@ namespace ItemResolver.Infrastructure
 
         public async Task<List<Item>> ListItems(Filter filterArguments)
         {
-            // TODO: Look into scan conditions
-            var scanConditions = new List<ScanCondition>();
-            {
-            }
-            var results = await _context.ScanAsync<Item>(scanConditions).GetRemainingAsync();
+            // var scanOperator = filterArguments.FilterOperator == Operators.NotEquals
+            //     ? ScanOperator.NotEqual
+            //     : ScanOperator.Equal;
+            // var scanCondition =
+            //     new ScanCondition("DeviceID", scanOperator, filterArguments.DeviceId);
+            //     return await _context.ScanAsync<Item>(scanCondition).GetRemainingAsync();
+            var items = await _context.QueryAsync<Item>(filterArguments.DeviceId)
+                .GetRemainingAsync();
+            return items.ToList();
+        }
 
-            if (!string.IsNullOrEmpty(filterArguments?.DeviceIdFilter?.EqualsFilter))
-            {
-                results = results.Where(item => item.DeviceId == filterArguments.DeviceIdFilter.EqualsFilter).ToList();
-            }
-            else if (!string.IsNullOrEmpty(filterArguments?.DeviceIdFilter?.NotEqualsFilter))
-            {
-                results = results.Where(item => item.DeviceId != filterArguments.DeviceIdFilter.NotEqualsFilter).ToList();
-            }
+        public Task<Item> CreateItem(Input inputArguments)
+        {
+            throw new NotImplementedException();
+        }
 
-            return results;
+        public Task<Item> UpdateItem(Input inputArguments)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Item> DeleteItem(Input inputArguments)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -10,6 +10,12 @@ namespace ItemResolver.Core.Interface
         Task<Item> GetItem(Input inputArguments);
         
         Task<List<Item>> ListItems(Filter filterArguments);
+        
+        Task<Item> CreateItem(Input inputArguments);
+        
+        Task<Item> UpdateItem(Input inputArguments);
+        
+        Task<Item> DeleteItem(Input inputArguments);
 
     }
 }

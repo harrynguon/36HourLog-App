@@ -6,7 +6,7 @@ schema {
 
 type Query {
   getItem(input: AllFieldsInput!): Item
-  listItems(filter: TableItemFilterInput): ItemList
+  listItems(filter: TableItemFilterInput!): ItemList
 }
 
 type Mutation {
@@ -32,10 +32,11 @@ input AllFieldsInput {
 }
 
 input TableItemFilterInput {
-  DeviceID: TableStringFilterInput
+  DeviceID: String!
+  Operator: FilterOperator!
 }
 
-input TableStringFilterInput {
-  ne: String
-  eq: String
+enum FilterOperator {
+  EQ
+  NE
 }

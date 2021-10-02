@@ -45,16 +45,10 @@ namespace ItemResolver.Core.Model
     public class Filter
     {
         [JsonPropertyName("DeviceID")]
-        public DeviceIdFilter DeviceIdFilter { get; set; }
-    }
-    
-    public class DeviceIdFilter
-    {
-        [JsonPropertyName("eq")]
-        public string EqualsFilter { get; set; }
+        public string DeviceId { get; set; }
         
-        [JsonPropertyName("ne")]
-        public string NotEqualsFilter { get; set; }
+        [JsonPropertyName("Operator")]
+        public string FilterOperator { get; set; }
     }
 
     /// <summary>
@@ -81,6 +75,11 @@ namespace ItemResolver.Core.Model
         /// E.g. createItem, ListItems, deleteItem
         /// </summary>
         public string FieldName { get; set; }
+        
+        /// <summary>
+        /// E.g. "{\n  Items {\n    Description\n    ExpiryDate\n    DeviceID\n  }\n}"
+        /// </summary>
+        public string SelectionSetGraphQL { get; set; }
     }
 
 }

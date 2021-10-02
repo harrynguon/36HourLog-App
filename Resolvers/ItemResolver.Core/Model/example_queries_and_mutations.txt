@@ -54,3 +54,35 @@ GetItem
     },
     "stash": {}
 }
+
+List
+
+{
+    "arguments": {
+        "filter": {
+            "DeviceID": "fakeDevice",
+            "Operator": "EQ"
+        }
+    },
+    "identity": null,
+    "source": null,
+    "request": {
+        "headers": {
+            ...
+        }
+    },
+    "prev": null,
+    "info": {
+        "selectionSetList": [
+            "Items",
+            "Items/Description",
+            "Items/ExpiryDate",
+            "Items/DeviceID"
+        ],
+        "selectionSetGraphQL": "{\n  Items {\n    Description\n    ExpiryDate\n    DeviceID\n  }\n}",
+        "parentTypeName": "Query",
+        "fieldName": "listItems",
+        "variables": {}
+    },
+    "stash": {}
+}
