@@ -61,13 +61,13 @@ namespace ItemResolver.Infrastructure
             }
             var results = await _context.ScanAsync<Item>(scanConditions).GetRemainingAsync();
 
-            if (!string.IsNullOrEmpty(filterArguments.DeviceIdFilter?.Equals))
+            if (!string.IsNullOrEmpty(filterArguments.DeviceIdFilter?.EqualsFilter))
             {
-                results = results.Where(item => item.DeviceId == filterArguments.DeviceIdFilter.Equals).ToList();
+                results = results.Where(item => item.DeviceId == filterArguments.DeviceIdFilter.EqualsFilter).ToList();
             }
-            else if (!string.IsNullOrEmpty(filterArguments.DeviceIdFilter?.NotEquals))
+            else if (!string.IsNullOrEmpty(filterArguments.DeviceIdFilter?.NotEqualsFilter))
             {
-                results = results.Where(item => item.DeviceId != filterArguments.DeviceIdFilter.NotEquals).ToList();
+                results = results.Where(item => item.DeviceId != filterArguments.DeviceIdFilter.NotEqualsFilter).ToList();
             }
 
             return results;

@@ -51,10 +51,10 @@ namespace ItemResolver.Core.Model
     public class DeviceIdFilter
     {
         [JsonPropertyName("eq")]
-        public string Equals { get; set; }
+        public string EqualsFilter { get; set; }
         
         [JsonPropertyName("ne")]
-        public string NotEquals { get; set; }
+        public string NotEqualsFilter { get; set; }
     }
 
     /// <summary>

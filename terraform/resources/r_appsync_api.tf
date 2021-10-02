@@ -1,3 +1,14 @@
+variable "appsync_resolvers_mapping" {
+  type = map(string)
+  default = {
+    getItem    = "Query"
+    listItems  = "Query"
+    createItem = "Mutation"
+    updateItem = "Mutation"
+    deleteItem = "Mutation"
+  }
+}
+
 resource "aws_appsync_graphql_api" "api" {
   name = "${var.app_name}-appsync-api"
   authentication_type = "API_KEY"
@@ -13,6 +24,10 @@ resource "aws_appsync_graphql_api" "api" {
   tags = var.tags
 }
 
+resource "aws_appsync_api_key" "api_key" {
+  api_id = aws_appsync_graphql_api.api.id
+}
+
 resource "aws_appsync_datasource" "api_datasource" {
   api_id = aws_appsync_graphql_api.api.id
   name = "app_36_hours_datasource"
@@ -24,6 +39,11 @@ resource "aws_appsync_datasource" "api_datasource" {
   }
 }
 
-resource "aws_appsync_api_key" "api_key" {
+resource "aws_appsync_resolver" "appsync_api_resolvers" {
+  for_each = var.appsync_resolvers_mapping
+  field  = each.key
+  type   = each.value
+
   api_id = aws_appsync_graphql_api.api.id
+  data_source = aws_appsync_datasource.api_datasource.name
 }
