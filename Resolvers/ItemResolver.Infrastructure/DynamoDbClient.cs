@@ -59,21 +59,18 @@ namespace ItemResolver.Infrastructure
             var scanConditions = new List<ScanCondition>();
             {
             }
-            var resultsUnfiltered = await _context.ScanAsync<Item>(scanConditions).GetRemainingAsync();
-            var resultsFiltered = new List<Item>();
+            var results = await _context.ScanAsync<Item>(scanConditions).GetRemainingAsync();
 
-            if (!string.IsNullOrEmpty(filterArguments.DeviceIdFilter.Equals))
+            if (!string.IsNullOrEmpty(filterArguments.DeviceIdFilter?.Equals))
             {
-                resultsFiltered =
-                    resultsUnfiltered.Where(item => item.DeviceId == filterArguments.DeviceIdFilter.Equals).ToList();
+                results = results.Where(item => item.DeviceId == filterArguments.DeviceIdFilter.Equals).ToList();
             }
-            else
+            else if (!string.IsNullOrEmpty(filterArguments.DeviceIdFilter?.NotEquals))
             {
-                resultsFiltered =
-                    resultsUnfiltered.Where(item => item.DeviceId != filterArguments.DeviceIdFilter.NotEquals).ToList();
+                results = results.Where(item => item.DeviceId != filterArguments.DeviceIdFilter.NotEquals).ToList();
             }
-            
-            return resultsFiltered;
+
+            return results;
         }
     }
 }

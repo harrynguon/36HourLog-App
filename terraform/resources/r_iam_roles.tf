@@ -1,4 +1,3 @@
-// Role for AppSync
 resource "aws_iam_role" "role_appsync" {
   name = "${var.app_name}-appsync-role"
 
@@ -18,7 +17,6 @@ resource "aws_iam_role" "role_appsync" {
   tags = var.tags
 }
 
-// AppSync Role Policy for DynamoDB actions and CloudWatch events
 resource "aws_iam_role_policy" "role_policy_appsync" {
   name = "${var.app_name}-appsync-role-policy"
   role = aws_iam_role.role_appsync.id

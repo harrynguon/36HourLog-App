@@ -17,10 +17,10 @@ resource "aws_appsync_datasource" "api_datasource" {
   api_id = aws_appsync_graphql_api.api.id
   name = "app_36_hours_datasource"
   service_role_arn = aws_iam_role.role_appsync.arn
-  type = "AMAZON_DYNAMODB"
 
-  dynamodb_config {
-    table_name = aws_dynamodb_table.main_table.name
+  type = "AWS_LAMBDA"
+  lambda_config {
+    function_arn = aws_lambda_function.lambda_appsync_resolver.arn
   }
 }
 

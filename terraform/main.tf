@@ -22,7 +22,7 @@ provider "aws" {
   }
 }
 
-module "api" {
+module "aws_resources" {
   source = ".//resources"
 
   account_id = var.account_id
