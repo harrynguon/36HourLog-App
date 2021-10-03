@@ -35,7 +35,7 @@ namespace ItemResolver.Lambda
             ConfigureServices(serviceCollection);
             var serviceProvider = serviceCollection.BuildServiceProvider();
             
-            return serviceProvider.GetService<App>()?.Run(input, context).Result;
+            return serviceProvider.GetService<App>()?.Handle(input, context).Result;
         }
 
         /// <summary>

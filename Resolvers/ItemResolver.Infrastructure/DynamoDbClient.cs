@@ -91,6 +91,8 @@ namespace ItemResolver.Infrastructure
         /// <returns></returns>
         public async Task<List<Item>> ListItems(Filter filterArguments, string attributeSet)
         {
+            var arithmeticOperator = filterArguments.FilterOperator == Operators.NotEquals
+                ? "<>" : "=";
             var scanRequest = new ScanRequest
             {
                 TableName = Constants.TableName,
@@ -100,7 +102,7 @@ namespace ItemResolver.Infrastructure
                         $":{Constants.DeviceId}", new AttributeValue { S = filterArguments.DeviceId }
                     }  
                 },
-                FilterExpression = $"{Constants.DeviceId} = :{Constants.DeviceId}",
+                FilterExpression = $"{Constants.DeviceId} {arithmeticOperator} :{Constants.DeviceId}",
                 ProjectionExpression = attributeSet,
                 ConsistentRead = true
             };

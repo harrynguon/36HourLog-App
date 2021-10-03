@@ -23,7 +23,7 @@ namespace ItemResolver.Core
             _dynamoDbClient = dynamoDbClient;
         }
         
-        public async Task<Response> Run(AppSyncEvent input, ILambdaContext context)
+        public async Task<Response> Handle(AppSyncEvent input, ILambdaContext context)
         {
             LambdaLogger.Log(JsonSerializer.Serialize(input));
             var arguments = input.Arguments;

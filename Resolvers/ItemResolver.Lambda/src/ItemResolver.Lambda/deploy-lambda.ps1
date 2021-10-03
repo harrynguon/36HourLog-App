@@ -2,7 +2,7 @@
 # https://aws.amazon.com/blogs/developer/deploying-net-core-aws-lambda-functions-from-the-command-line/
 
 # To run:
-# Ensure Rider 'Powershell' plugin has been installed.
+# Ensure Rider 'Powershell' plugin has been installed to run this script from the IDE.
 # Otherwise run manually through Powershell with '.\deploy-lambda.ps1'
 ## On Linux, use 'pwsh' for Powershell on Linux first
 
