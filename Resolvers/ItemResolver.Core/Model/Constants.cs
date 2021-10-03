@@ -3,6 +3,9 @@ namespace ItemResolver.Core.Model
     public static class Constants
     {
         public const string TableName = "36-hours-table";
+        public const string DeviceId = "DeviceID";
+        public const string ExpiryDate = "ExpiryDate";
+        public const string Description = "Description";
     }
 
     public static class Queries

@@ -46,10 +46,15 @@ namespace ItemResolver.Infrastructure
             var dynamoDbClient = new AmazonDynamoDBClient(credentials, config);
 
             _client = dynamoDbClient;
-
             _context = new DynamoDBContext(_client);
         }
         
+        /// <summary>
+        /// Uses Low-level client API to retrieve only the attributes from the DB that is requested by the client.
+        /// </summary>
+        /// <param name="inputArguments"></param>
+        /// <param name="attributeSet"></param>
+        /// <returns></returns>
         public async Task<Item> GetItem(Input inputArguments, string attributeSet)
         {
             var request = new GetItemRequest
@@ -58,10 +63,10 @@ namespace ItemResolver.Infrastructure
                 Key = new Dictionary<string, AttributeValue>
                 {
                     {
-                        "DeviceID", new AttributeValue {S = inputArguments.DeviceID}
+                        $"{Constants.DeviceId}", new AttributeValue {S = inputArguments.DeviceID}
                     },
                     {
-                        "ExpiryDate", new AttributeValue {S = inputArguments.ExpiryDate}
+                        $"{Constants.ExpiryDate}", new AttributeValue {S = inputArguments.ExpiryDate}
                     }
                 },
                 ProjectionExpression = attributeSet,
@@ -78,6 +83,12 @@ namespace ItemResolver.Infrastructure
             return Utilities.MapToItem(response.Item);
         }
 
+        /// <summary>
+        /// Uses Low-level client API to retrieve only the attributes from the DB that is requested by the client.
+        /// </summary>
+        /// <param name="filterArguments"></param>
+        /// <param name="attributeSet"></param>
+        /// <returns></returns>
         public async Task<List<Item>> ListItems(Filter filterArguments, string attributeSet)
         {
             var scanRequest = new ScanRequest
@@ -86,10 +97,10 @@ namespace ItemResolver.Infrastructure
                 ExpressionAttributeValues = new Dictionary<string, AttributeValue>
                 {
                     {
-                        ":DeviceID", new AttributeValue { S = filterArguments.DeviceId }
+                        $":{Constants.DeviceId}", new AttributeValue { S = filterArguments.DeviceId }
                     }  
                 },
-                FilterExpression = "DeviceID = :DeviceID",
+                FilterExpression = $"{Constants.DeviceId} = :{Constants.DeviceId}",
                 ProjectionExpression = attributeSet,
                 ConsistentRead = true
             };
@@ -99,19 +110,63 @@ namespace ItemResolver.Infrastructure
             return Utilities.MapToItem(response.Items);
         }
 
-        public Task<Item> CreateItem(Input inputArguments)
+        public async Task<Item> CreateItem(Input inputArguments)
         {
-            throw new NotImplementedException();
+            var item = Utilities.ConstructItemFromInput(inputArguments);
+            try
+            {
+                await _context.SaveAsync(item);
+            }
+            catch (Exception e)
+            {
+                LambdaLogger.Log(e.Message);
+                return null;
+            }
+
+            return item;
         }
 
-        public Task<Item> UpdateItem(Input inputArguments)
+        public async Task<Item> UpdateItem(Input inputArguments)
         {
-            throw new NotImplementedException();
+            var item = Utilities.ConstructItemFromInput(inputArguments);
+            var itemFromApi = await _context.LoadAsync(item);
+            if (itemFromApi == null)
+            {
+                return null;
+            }
+            
+            try
+            {
+                await _context.SaveAsync(itemFromApi);
+            }
+            catch (Exception e)
+            {
+                LambdaLogger.Log(e.Message);
+                return null;
+            }
+
+            return itemFromApi;
         }
 
-        public Task<Item> DeleteItem(Input inputArguments)
+        public async Task<Item> DeleteItem(Input inputArguments)
         {
-            throw new NotImplementedException();
+            var item = Utilities.ConstructItemFromInput(inputArguments);
+            var itemFromApi = await _context.LoadAsync(item);
+            if (itemFromApi == null)
+            {
+                return null;
+            }
+            try
+            {
+                await _context.DeleteAsync(itemFromApi);
+            }
+            catch (Exception e)
+            {
+                LambdaLogger.Log(e.Message);
+                return null;
+            }
+            
+            return itemFromApi;
         }
     }
 }

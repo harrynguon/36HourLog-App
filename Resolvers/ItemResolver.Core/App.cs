@@ -31,24 +31,27 @@ namespace ItemResolver.Core
             var attributeSet = string.Join(", ", input.Info.SelectionSetList);
             
             var field = input.Info.FieldName;
+            Item item = null;
             switch (field)
             {
-                case Queries.GetItem:
-                    var item = await _dynamoDbClient.GetItem(arguments.Input, attributeSet);
-                    return item == null ? null : new Response(item);
-
                 case Queries.ListItems:
                     var items = await _dynamoDbClient.ListItems(arguments.Filter, attributeSet);
                     return new Response(items);
-                case Mutations.CreateItem: 
+                case Queries.GetItem:
+                    item = await _dynamoDbClient.GetItem(arguments.Input, attributeSet);
                     break;
-                case Mutations.UpdateItem: 
+                case Mutations.CreateItem:
+                    item = await _dynamoDbClient.CreateItem(arguments.Input);
                     break;
-                case Mutations.DeleteItem: 
+                case Mutations.UpdateItem:
+                    item = await _dynamoDbClient.UpdateItem(arguments.Input);
+                    break;
+                case Mutations.DeleteItem:
+                    item = await _dynamoDbClient.DeleteItem(arguments.Input);
                     break;
             }
             
-            return null;
+            return item != null ? new Response(item) : null;
         }
 
         public class Response : Item

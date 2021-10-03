@@ -7,23 +7,23 @@ using Amazon.DynamoDBv2.DataModel;
 
 namespace ItemResolver.Core.Model
 {
-    [DynamoDBTable("36-hours-table")]
+    [DynamoDBTable(Constants.TableName)]
     public class Item
     {
-        [DynamoDBHashKey("DeviceID")]
-        [DynamoDBProperty("DeviceID")]
-        [JsonPropertyName("DeviceID")]
+        [DynamoDBHashKey(Constants.DeviceId)]
+        [DynamoDBProperty(Constants.DeviceId)]
+        [JsonPropertyName(Constants.DeviceId)]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? DeviceId { get; set; }
         
         [DynamoDBRangeKey]
         [DynamoDBProperty]
-        [JsonPropertyName("ExpiryDate")]
+        [JsonPropertyName(Constants.ExpiryDate)]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? ExpiryDate { get; set; }
         
         [DynamoDBProperty]
-        [JsonPropertyName("Description")]
+        [JsonPropertyName(Constants.Description)]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Description { get; set; }
         
