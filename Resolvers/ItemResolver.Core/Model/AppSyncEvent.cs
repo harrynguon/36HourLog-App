@@ -65,6 +65,7 @@ namespace ItemResolver.Core.Model
             set => _selectionSetList = value
                     .Select(attribute => attribute.Contains("/") ? attribute.Split("/")[1] : attribute)
                     .Where(attribute => attribute != "Items")
+                    .Where(attribute => !attribute.Contains("typename"))
                     .ToList();
         }
         
