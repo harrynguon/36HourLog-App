@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace ItemResolver.Core.Model
@@ -75,7 +76,22 @@ namespace ItemResolver.Core.Model
         /// E.g. createItem, ListItems, deleteItem
         /// </summary>
         public string FieldName { get; set; }
-        
+
+        private List<string> _selectionSetList;
+
+        /// <summary>
+        /// E.g. "selectionSetList": ["Items", "Items/Description", "Items/ExpiryDate", "Items/DeviceID"],
+        /// Maps to ["Description", "ExpiryDate", "DeviceID"]
+        /// </summary>
+        public List<string> SelectionSetList
+        {
+            get => _selectionSetList;
+            set => _selectionSetList = value
+                    .Select(attribute => attribute.Contains("/") ? attribute.Split("/")[1] : attribute)
+                    .Where(attribute => attribute != "Items")
+                    .ToList();
+        }
+
         /// <summary>
         /// E.g. "{\n  Items {\n    Description\n    ExpiryDate\n    DeviceID\n  }\n}"
         /// </summary>

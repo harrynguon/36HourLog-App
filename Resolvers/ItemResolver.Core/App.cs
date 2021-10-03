@@ -27,17 +27,19 @@ namespace ItemResolver.Core
         {
             LambdaLogger.Log(JsonSerializer.Serialize(input));
             var arguments = input.Arguments;
+
+            var attributeSet = string.Join(", ", input.Info.SelectionSetList);
             
             var field = input.Info.FieldName;
             switch (field)
             {
                 case Queries.GetItem:
-                    var item = await _dynamoDbClient.GetItem(arguments.Input);
-                    return item == null ? null : new Response(item, input.Info.SelectionSetGraphQL);
+                    var item = await _dynamoDbClient.GetItem(arguments.Input, attributeSet);
+                    return item == null ? null : new Response(item);
 
                 case Queries.ListItems:
-                    var items = await _dynamoDbClient.ListItems(arguments.Filter);
-                    return new Response(items, input.Info.SelectionSetGraphQL);
+                    var items = await _dynamoDbClient.ListItems(arguments.Filter, attributeSet);
+                    return new Response(items);
                 case Mutations.CreateItem: 
                     break;
                 case Mutations.UpdateItem: 
@@ -54,23 +56,16 @@ namespace ItemResolver.Core
             
             public Response() {}
 
-            public Response(Item item, string returnSet)
+            public Response(Item item)
             {
-                DeviceId = returnSet.Contains("DeviceID") ? item.DeviceId : null;
-                ExpiryDate = returnSet.Contains("ExpiryDate") ? item.ExpiryDate : null;
-                Description = returnSet.Contains("Description") ? item.Description : null;
+                DeviceId = item.DeviceId;
+                ExpiryDate = item.ExpiryDate;
+                Description = item.Description;
             }
 
-            public Response(IEnumerable<Item> items, string returnSet)
+            public Response(IEnumerable<Item> items)
             {
-                var filteredList = items.Select(item => new Item
-                    {
-                        DeviceId = returnSet.Contains("DeviceID") ? item.DeviceId : null,
-                        ExpiryDate = returnSet.Contains("ExpiryDate") ? item.ExpiryDate : null,
-                        Description = returnSet.Contains("Description") ? item.Description : null
-                    })
-                .ToList();
-                Items = filteredList.Count > 0 ? filteredList : new List<Item>();
+                Items = items.ToList();
             }
             
         }

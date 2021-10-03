@@ -1,6 +1,7 @@
 #nullable enable
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using Amazon.DynamoDBv2.DataModel;
 
@@ -29,6 +30,6 @@ namespace ItemResolver.Core.Model
         // Result for the listItems query
         [JsonPropertyName("Items")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        protected List<Item>? Items { get; set; }
+        public List<Item>? Items { get; set; }
     }
 }

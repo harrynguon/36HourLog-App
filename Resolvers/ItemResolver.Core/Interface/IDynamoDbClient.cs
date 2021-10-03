@@ -7,9 +7,9 @@ namespace ItemResolver.Core.Interface
     public interface IDynamoDbClient
     {
         
-        Task<Item> GetItem(Input inputArguments);
+        Task<Item> GetItem(Input inputArguments, string attributeSet);
         
-        Task<List<Item>> ListItems(Filter filterArguments);
+        Task<List<Item>> ListItems(Filter filterArguments, string attributeSet);
         
         Task<Item> CreateItem(Input inputArguments);
         

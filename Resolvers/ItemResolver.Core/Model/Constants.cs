@@ -1,5 +1,10 @@
 namespace ItemResolver.Core.Model
 {
+    public static class Constants
+    {
+        public const string TableName = "36-hours-table";
+    }
+
     public static class Queries
     {
         public const string GetItem = "getItem";
