@@ -114,5 +114,60 @@ resource "aws_iam_role_policy" "role_policy_resolver_lambda" {
       }
     ]
   })
+}
 
+resource "aws_iam_role" "cognito_unauthenticated_role" {
+  name = "${var.app_name}-cognito-unauthenticated-role"
+  
+  assume_role_policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Principal": {
+          "Federated": "cognito-identity.amazonaws.com"
+        },
+        "Action": "sts:AssumeRoleWithWebIdentity",
+        "Condition": {
+          "StringEquals": {
+            "cognito-identity.amazonaws.com:aud": aws_cognito_identity_pool.cognito_pool.id
+          },
+          "ForAnyValue:StringLike": {
+            "cognito-identity.amazonaws.com:amr": "unauthenticated"
+          }
+        }
+      }
+    ]
+  })
+  tags = var.tags
+}
+
+resource "aws_iam_role_policy" "cognito_unauthenticated_role_policy" {
+  name = "${var.app_name}-cognito-unauthenticated-role-policy"
+  role   = aws_iam_role.cognito_unauthenticated_role.id
+  
+  policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": [
+          "mobileanalytics:PutEvents"
+#          "cognito-sync:*"
+        ],
+        "Resource": [
+          "*"
+        ]
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
+          "appsync:GraphQL"
+        ],
+        "Resource": [
+          "*"
+        ]
+      }
+    ]
+  })
 }

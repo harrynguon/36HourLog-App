@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@apollo/client": "^3.4.15",
+    "@aws-sdk/client-cognito-identity": "^3.34.0",
+    "@aws-sdk/credential-provider-cognito-identity": "^3.34.0",
     "@expo-google-fonts/source-sans-pro": "^0.2.0",
     "apollo-link": "^1.2.14",
     "apollo-link-http": "^1.5.17",
