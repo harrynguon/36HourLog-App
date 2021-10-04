@@ -8,17 +8,6 @@ namespace ItemResolver.Core.Util
 {
     public static class Utilities
     {
-
-        public static Item ConstructItemFromInput(Input inputArguments)
-        {
-            return new Item
-            {
-                DeviceId = inputArguments.DeviceID,
-                ExpiryDate = inputArguments.ExpiryDate,
-                Description = inputArguments.Description
-            };
-        }
-        
         public static Item MapToItem(Dictionary<string, AttributeValue> dictionary)
         {
             var stringDictionary = dictionary

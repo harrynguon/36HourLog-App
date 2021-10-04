@@ -7,15 +7,15 @@ namespace ItemResolver.Core.Interface
     public interface IDynamoDbClient
     {
         
-        Task<Item> GetItem(Input inputArguments, string attributeSet);
+        Task<Item> GetItem(Item item, string attributeSet);
         
         Task<List<Item>> ListItems(Filter filterArguments, string attributeSet);
         
-        Task<Item> CreateItem(Input inputArguments);
+        Task<Item> CreateItem(Item item);
         
-        Task<Item> UpdateItem(Input inputArguments);
+        Task<Item> UpdateItem(Item item);
         
-        Task<Item> DeleteItem(Input inputArguments);
+        Task<Item> DeleteItem(Item item);
 
     }
 }

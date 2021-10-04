@@ -19,7 +19,8 @@ namespace ItemResolver.Core.Model
     
     public class Arguments
     {
-        public Input Input { get; set; }
+        
+        public Item Item { get; set; }
         
         public Filter Filter { get; set; }
         
@@ -32,13 +33,6 @@ namespace ItemResolver.Core.Model
         
         [JsonPropertyName("Operator")]
         public string FilterOperator { get; set; }
-    }
-    
-    public class Input
-    {
-        public string DeviceID { get; set; }
-        public string ExpiryDate { get; set; }
-        public string Description { get; set; }
     }
     
     public class Info

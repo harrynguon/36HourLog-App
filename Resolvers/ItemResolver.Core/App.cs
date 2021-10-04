@@ -38,16 +38,16 @@ namespace ItemResolver.Core
                     var items = await _dynamoDbClient.ListItems(arguments.Filter, attributeSet);
                     return new Response(items);
                 case Queries.GetItem:
-                    item = await _dynamoDbClient.GetItem(arguments.Input, attributeSet);
+                    item = await _dynamoDbClient.GetItem(arguments.Item, attributeSet);
                     break;
                 case Mutations.CreateItem:
-                    item = await _dynamoDbClient.CreateItem(arguments.Input);
+                    item = await _dynamoDbClient.CreateItem(arguments.Item);
                     break;
                 case Mutations.UpdateItem:
-                    item = await _dynamoDbClient.UpdateItem(arguments.Input);
+                    item = await _dynamoDbClient.UpdateItem(arguments.Item);
                     break;
                 case Mutations.DeleteItem:
-                    item = await _dynamoDbClient.DeleteItem(arguments.Input);
+                    item = await _dynamoDbClient.DeleteItem(arguments.Item);
                     break;
             }
             

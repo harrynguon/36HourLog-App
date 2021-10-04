@@ -55,7 +55,7 @@ namespace ItemResolver.Infrastructure
         /// <param name="inputArguments"></param>
         /// <param name="attributeSet"></param>
         /// <returns></returns>
-        public async Task<Item> GetItem(Input inputArguments, string attributeSet)
+        public async Task<Item> GetItem(Item item, string attributeSet)
         {
             var request = new GetItemRequest
             {
@@ -63,10 +63,10 @@ namespace ItemResolver.Infrastructure
                 Key = new Dictionary<string, AttributeValue>
                 {
                     {
-                        $"{Constants.DeviceId}", new AttributeValue {S = inputArguments.DeviceID}
+                        $"{Constants.DeviceId}", new AttributeValue {S = item.DeviceId}
                     },
                     {
-                        $"{Constants.ExpiryDate}", new AttributeValue {S = inputArguments.ExpiryDate}
+                        $"{Constants.ExpiryDate}", new AttributeValue {S = item.ExpiryDate}
                     }
                 },
                 ProjectionExpression = attributeSet,
@@ -112,9 +112,8 @@ namespace ItemResolver.Infrastructure
             return Utilities.MapToItem(response.Items);
         }
 
-        public async Task<Item> CreateItem(Input inputArguments)
+        public async Task<Item> CreateItem(Item item)
         {
-            var item = Utilities.ConstructItemFromInput(inputArguments);
             try
             {
                 await _context.SaveAsync(item);
@@ -128,9 +127,8 @@ namespace ItemResolver.Infrastructure
             return item;
         }
 
-        public async Task<Item> UpdateItem(Input inputArguments)
+        public async Task<Item> UpdateItem(Item item)
         {
-            var item = Utilities.ConstructItemFromInput(inputArguments);
             var itemFromApi = await _context.LoadAsync(item);
             if (itemFromApi == null)
             {
@@ -150,9 +148,8 @@ namespace ItemResolver.Infrastructure
             return itemFromApi;
         }
 
-        public async Task<Item> DeleteItem(Input inputArguments)
+        public async Task<Item> DeleteItem(Item item)
         {
-            var item = Utilities.ConstructItemFromInput(inputArguments);
             var itemFromApi = await _context.LoadAsync(item);
             if (itemFromApi == null)
             {

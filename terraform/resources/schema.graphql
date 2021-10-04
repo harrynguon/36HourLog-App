@@ -5,30 +5,30 @@ schema {
 }
 
 type Query {
-  getItem(input: AllFieldsInput!): Item
+  getItem(item: ItemInput!): Item
   listItems(filter: TableItemFilterInput!): ItemList
 }
 
 type Mutation {
-  createItem(input: AllFieldsInput!): Item
-  updateItem(input: AllFieldsInput!): Item
-  deleteItem(input: AllFieldsInput!): Item
+  createItem(item: ItemInput!): Item
+  updateItem(item: ItemInput!): Item
+  deleteItem(item: ItemInput!): Item
 }
 
 type Item {
   DeviceID: String!
   ExpiryDate: String!
-  Description: String
+  Description: String!
 }
 
 type ItemList {
   Items: [Item]!
 }
 
-input AllFieldsInput {
-  DeviceID: String!
-  ExpiryDate: String!
-  Description: String!
+input ItemInput {
+  DeviceID: String
+  ExpiryDate: String
+  Description: String
 }
 
 input TableItemFilterInput {
