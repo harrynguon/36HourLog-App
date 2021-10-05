@@ -11,10 +11,10 @@ variable "appsync_resolvers_mapping" {
 
 resource "aws_appsync_graphql_api" "api" {
   name = "${var.app_name}-appsync-api"
-  authentication_type = "API_KEY"
+  authentication_type = "AWS_IAM"
 
   schema = file("${path.module}/schema.graphql")
-
+  
   log_config {
     cloudwatch_logs_role_arn = aws_iam_role.role_appsync.arn
     field_log_level = "ERROR"

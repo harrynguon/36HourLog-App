@@ -13,6 +13,8 @@ import {
 	TextInput,
 	Title,
 } from 'react-native-paper';
+import { gql } from 'graphql-tag';
+import { useQuery } from '@apollo/client';
 
 const ListItem = ({ item, setModalVisible, setInputText, setListItemReference, setSnapshot }) => {
 	return (
@@ -78,6 +80,22 @@ const HomeScreen = () => {
 	const [deleteItemSnapshotToRestore, setDeleteItemSnapshotToRestore] = useState(null);
 	const [deleteItemSnackbarVisible, setDeleteItemSnackbarVisible] = useState(false);
 
+	const query = gql(`
+		query listItems {
+			getItem(item: {ExpiryDate: "2022", DeviceID: "Harry1", Description: "First item"}) {
+				 DeviceID
+				 ExpiryDate
+				 Description
+			}
+		}
+	`);
+
+	const { loading, error, data } = useQuery(query);
+
+	if (!loading) {
+		console.log(data['getItem']['DeviceID']);
+	}
+
 	return (
 		<View style={[styles.container, styles.maxWidth]}>
 			<View style={[styles.headerContainer, styles.maxWidth]}>
@@ -87,6 +105,7 @@ const HomeScreen = () => {
 					You can log up to 5 items. Swipe an item to delete it. Items are automatically
 					deleted after 36 hours.
 				</Paragraph>
+				{!loading && <Text>{data['getItem']['DeviceID']}</Text>}
 			</View>
 
 			<View style={[styles.contentContainer, styles.maxWidth]}>

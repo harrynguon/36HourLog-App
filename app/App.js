@@ -4,45 +4,27 @@ import HomeScreen from './src/screens/HomeScreen';
 import { useFonts, SourceSansPro_400Regular } from '@expo-google-fonts/source-sans-pro';
 import { StatusBar } from 'expo-status-bar';
 import { View } from 'react-native';
-import { ApolloClient, InMemoryCache, ApolloProvider, useQuery } from '@apollo/client';
-// import {AWSAppSyncClient} from "aws-appsync";
-import { gql } from 'graphql-tag';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { AUTH_TYPE } from 'aws-appsync';
+import { ApolloLink } from 'apollo-link';
+import { createAuthLink } from 'aws-appsync-auth-link';
+import { createHttpLink } from 'apollo-link-http';
 
 export default function App() {
 	let [fontsLoaded] = useFonts({ SourceSansPro_400Regular });
 
-	const AWSAppSyncClient = require('aws-appsync').default;
+	const url = process.env.REACT_APP_API_URL;
+	const region = process.env.REACT_APP_REGION;
+	const auth = process.env.REACT_APP_AUTH;
 
-	console.log(process.env.REACT_APP_API_KEY);
-
-	const client = new AWSAppSyncClient({
-		url: process.env.REACT_APP_API_URL,
-		region: 'ap-southeast-2',
-		auth: {
-			type: 'API_KEY',
-			apiKey: process.env.REACT_APP_API_KEY,
-		},
-		disableOffline: true,
+	const link = ApolloLink.from([
+		createAuthLink({ url, region, auth }),
+		createHttpLink({ uri: url }),
+	]);
+	const client = new ApolloClient({
+		link,
+		cache: new InMemoryCache(),
 	});
-
-	const query = gql(`
-		query listItems {
-			getItem(input: {ExpiryDate: "2022", DeviceID: "Harry1", Description: "First item"}) {
-				 DeviceID
-				 ExpiryDate
-				 Description
-			}
-		}
-	`);
-
-	client.hydrated().then((client) =>
-		client
-			.query({ query: query, fetchPolicy: 'network-only' })
-			.then((data) => console.log(data.data))
-			.catch((error) => {
-				console.error('TEST ERR =>', error);
-			})
-	);
 
 	if (!fontsLoaded) {
 		return (
@@ -54,10 +36,12 @@ export default function App() {
 		);
 	} else {
 		return (
-			<PaperProvider>
-				<HomeScreen />
-				{/*<StatusBar style="auto" />*/}
-			</PaperProvider>
+			<ApolloProvider client={client}>
+				<PaperProvider>
+					<HomeScreen />
+					{/*<StatusBar style="auto" />*/}
+				</PaperProvider>
+			</ApolloProvider>
 		);
 	}
 }
