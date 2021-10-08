@@ -35,9 +35,9 @@ resource "aws_iam_role_policy" "role_policy_appsync" {
       {
         "Effect": "Allow",
         "Action": [
-            "logs:CreateLogGroup",
-            "logs:CreateLogStream",
-            "logs:PutLogEvents"
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
         ],
         "Resource": "arn:aws:logs:${var.region}:${var.account_id}:*"
       }
