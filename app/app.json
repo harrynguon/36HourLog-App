@@ -17,9 +17,14 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.harry412.app.36hours",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
     },
     "android": {
+      "package": "com.harry412.app.thirtysixhours",
+      "versionCode": 1,
+      "permissions": [],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"

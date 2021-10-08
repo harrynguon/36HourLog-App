@@ -13,19 +13,6 @@ import { createHttpLink } from 'apollo-link-http';
 export default function App() {
 	let [fontsLoaded] = useFonts({ SourceSansPro_400Regular });
 
-	const url = process.env.REACT_APP_API_URL;
-	const region = process.env.REACT_APP_REGION;
-	const auth = process.env.REACT_APP_AUTH;
-
-	const link = ApolloLink.from([
-		createAuthLink({ url, region, auth }),
-		createHttpLink({ uri: url }),
-	]);
-	const client = new ApolloClient({
-		link,
-		cache: new InMemoryCache(),
-	});
-
 	if (!fontsLoaded) {
 		return (
 			<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -36,12 +23,10 @@ export default function App() {
 		);
 	} else {
 		return (
-			<ApolloProvider client={client}>
-				<PaperProvider>
-					<HomeScreen />
-					{/*<StatusBar style="auto" />*/}
-				</PaperProvider>
-			</ApolloProvider>
+			<PaperProvider>
+				<HomeScreen />
+				{/*<StatusBar style="auto" />*/}
+			</PaperProvider>
 		);
 	}
 }
