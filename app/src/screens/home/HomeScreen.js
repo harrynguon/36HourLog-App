@@ -1,42 +1,61 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, FlatList, Dimensions } from 'react-native';
+import {
+	StyleSheet,
+	View,
+	Text,
+	FlatList,
+	Dimensions,
+	StatusBar,
+	TextInput,
+	Pressable,
+} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import Item from './components/Item';
+import { useEffect, useState } from 'react';
+import { useQuery } from '@apollo/client';
 
-const data = [
-	{
-		id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-		title: 'First Item',
-	},
-	{
-		id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-		title: 'Second Item',
-	},
-	{
-		id: '58694a0f-3da1-471f-bd96-145571e29d72',
-		title: 'Third Item',
-	},
-];
+import ListItemsQuery from '../../graphql/queries/listItemsQuery';
 
 const SCREEN_DIMENSIONS = Dimensions.get('screen');
 
-const SPACING = 20;
-const AVATAR_SIZE = 70;
-
 const HomeScreen = () => {
-	const renderItem = (item) => (
-		<View style={styles.item}>
-			<Text>{item.title}</Text>
-		</View>
-	);
+	const [quoteOfTheDay, setQuoteOfTheDay] = useState('');
+	const [quoteOfTheDayAuthor, setQuoteOfTheDayAuthor] = useState('');
+
+	const [data, setData] = useState([]);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const response = await fetch('https://quotes.rest/qod?language=en');
+				const json = await response.json();
+				setQuoteOfTheDay(json['contents']['quotes'][0]['quote']);
+				setQuoteOfTheDayAuthor(json['contents']['quotes'][0]['author']);
+			} catch (error) {
+				console.log('error', error);
+			}
+		};
+
+		fetchData();
+
+		// const { loading, error, data } = useQuery(ListItemsQuery);
+	}, []);
 
 	return (
-		<>
-			<View style={styles.container}>
-				<LinearGradient colors={['#D16BA5', '#86A8E7', '#5FFBF1']} style={styles.background} />
-				<FlatList data={data} renderItem={renderItem} keyExtractor={(item) => item.id} />
-				<Text>hi</Text>
+		<View style={styles.container}>
+			<LinearGradient colors={['#D16BA5', '#86A8E7', '#5FFBF1']} style={styles.background} />
+			<View style={styles.quoteOfTheDayContainer}>
+				<Text style={{ textDecorationLine: 'underline' }}>Quote of the Day: </Text>
+				<Text style={{ fontStyle: 'italic' }}>
+					{quoteOfTheDay} - {quoteOfTheDayAuthor}
+				</Text>
 			</View>
-		</>
+			<FlatList
+				data={data}
+				renderItem={(item) => Item(item)}
+				keyExtractor={(item, index) => item.deviceId + index + Math.random()}
+			/>
+		</View>
 	);
 };
 
@@ -45,9 +64,8 @@ export default HomeScreen;
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		flexDirection: 'column',
-		justifyContent: 'center',
 		alignItems: 'center',
+		paddingTop: StatusBar.currentHeight || 60,
 	},
 	background: {
 		position: 'absolute',
@@ -57,7 +75,11 @@ const styles = StyleSheet.create({
 		width: SCREEN_DIMENSIONS.width,
 		height: SCREEN_DIMENSIONS.height,
 	},
-	item: {
-		backgroundColor: 'green',
+	quoteOfTheDayContainer: {
+		width: SCREEN_DIMENSIONS.width / 1.5,
+		padding: 10,
+		marginBottom: 20,
+		borderRadius: 12,
+		backgroundColor: 'white',
 	},
 });

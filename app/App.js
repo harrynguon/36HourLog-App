@@ -39,7 +39,7 @@ export default function App() {
 		return (
 			<ApolloProvider client={client}>
 				<HomeScreen />
-				<StatusBar style="auto" />
+				<StatusBar style="hidden" />
 			</ApolloProvider>
 		);
 	}
