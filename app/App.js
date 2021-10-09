@@ -1,21 +1,22 @@
 import React from 'react';
-import { ActivityIndicator, Provider as PaperProvider, Text } from 'react-native-paper';
-import HomeScreen from './src/screens/HomeScreen';
+import HomeScreen from './src/screens/home/HomeScreen';
 import { useFonts, SourceSansPro_400Regular } from '@expo-google-fonts/source-sans-pro';
 import { StatusBar } from 'expo-status-bar';
-import { View } from 'react-native';
+import { ActivityIndicator, View, Text } from 'react-native';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
-import { AUTH_TYPE } from 'aws-appsync';
 import { ApolloLink } from 'apollo-link';
 import { createAuthLink } from 'aws-appsync-auth-link';
 import { createHttpLink } from 'apollo-link-http';
+import Config from 'react-native-config';
 
 export default function App() {
 	let [fontsLoaded] = useFonts({ SourceSansPro_400Regular });
 
-	const url = process.env.REACT_APP_API_URL;
-	const region = process.env.REACT_APP_REGION;
-	const auth = process.env.REACT_APP_AUTH;
+	const url = Config.REACT_APP_API_URL;
+	const region = Config.REACT_APP_REGION;
+	const auth = Config.REACT_APP_AUTH;
+
+	console.log('we here: ' + url);
 
 	const link = ApolloLink.from([
 		createAuthLink({ url, region, auth }),
@@ -37,10 +38,8 @@ export default function App() {
 	} else {
 		return (
 			<ApolloProvider client={client}>
-				<PaperProvider>
-					<HomeScreen />
-					{/*<StatusBar style="auto" />*/}
-				</PaperProvider>
+				<HomeScreen />
+				<StatusBar style="auto" />
 			</ApolloProvider>
 		);
 	}
