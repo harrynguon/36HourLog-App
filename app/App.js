@@ -7,14 +7,14 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { ApolloLink } from 'apollo-link';
 import { createAuthLink } from 'aws-appsync-auth-link';
 import { createHttpLink } from 'apollo-link-http';
-import Config from 'react-native-config';
+import { API_URL, REGION, AUTH } from '@env';
 
 export default function App() {
 	let [fontsLoaded] = useFonts({ SourceSansPro_400Regular });
 
-	const url = Config.REACT_APP_API_URL;
-	const region = Config.REACT_APP_REGION;
-	const auth = Config.REACT_APP_AUTH;
+	const url = API_URL;
+	const region = REGION;
+	const auth = AUTH;
 
 	console.log('we here: ' + url);
 
