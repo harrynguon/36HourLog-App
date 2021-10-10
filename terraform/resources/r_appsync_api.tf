@@ -11,7 +11,9 @@ variable "appsync_resolvers_mapping" {
 
 resource "aws_appsync_graphql_api" "api" {
   name = "${var.app_name}-appsync-api"
-  authentication_type = "AWS_IAM"
+  
+#  authentication_type = "AWS_IAM"
+  authentication_type = "API_KEY"
 
   schema = file("${path.module}/schema.graphql")
   
@@ -26,6 +28,7 @@ resource "aws_appsync_graphql_api" "api" {
 
 resource "aws_appsync_api_key" "api_key" {
   api_id = aws_appsync_graphql_api.api.id
+  expires = "2022-10-09T00:00:00Z"
 }
 
 resource "aws_appsync_datasource" "api_datasource" {

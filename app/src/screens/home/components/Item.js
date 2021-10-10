@@ -5,19 +5,15 @@ const SPACING = 20;
 const SCREEN_DIMENSIONS = Dimensions.get('screen');
 
 const Item = ({ item }) => {
+	console.log(item);
 	return (
 		<View style={styles.item}>
 			<View style={{ flex: 0.75 }}>
-				<TextInput
-					style={{ fontWeight: 'bold' }}
-					multiline
-					returnKeyType={'done'}
-					value={item.description}
-					// onEndEditing={
-				/>
+				<Text style={{ fontWeight: 'bold' }}>{item['Description']}</Text>
 			</View>
-			<View style={{ flex: 0.25 }}>
-				<Text style={{ fontWeight: 'bold' }}>23lk2m423</Text>
+			<View style={{ flexDirection: 'column', flex: 0.25 }}>
+				<Text>Expires in</Text>
+				<Text style={{ fontWeight: 'bold' }}>{item['ExpiryDate']}</Text>
 			</View>
 		</View>
 	);
