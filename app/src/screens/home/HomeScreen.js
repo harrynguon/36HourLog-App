@@ -11,12 +11,12 @@ import {
 	ActivityIndicator,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { AntDesign } from '@expo/vector-icons';
 import Item from './components/Item';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 
-import ListItemsQuery from '../../graphql/queries/listItemsQuery';
-import { gql } from 'graphql-tag';
+import ListItems from '../../graphql/queries/listItems';
 import LoadingIndicator from './components/LoadingIndicator';
 
 const SCREEN_DIMENSIONS = Dimensions.get('screen');
@@ -27,13 +27,17 @@ const HomeScreen = () => {
 
 	const [localData, setLocalData] = useState([]);
 
-	const { loading, error, data } = useQuery(ListItemsQuery);
+	const { loading, error, data } = useQuery(ListItems);
 
 	useEffect(() => {
 		if (data) {
 			setLocalData(data.listItems.Items);
 		}
 	}, [data]);
+
+	if (error) {
+		console.log(error);
+	}
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -58,7 +62,7 @@ const HomeScreen = () => {
 	}, []);
 
 	if (loading) {
-		return <LoadingIndicator text={'Retrieving data from the database...'} />;
+		return <LoadingIndicator text={'Retrieving your data...'} />;
 	} else {
 		return (
 			<View style={styles.container}>
@@ -74,6 +78,21 @@ const HomeScreen = () => {
 					renderItem={(item) => Item(item)}
 					keyExtractor={(item, index) => item['ExpiryDate']}
 				/>
+				<View style={{ marginBottom: 5 }}>
+					<Text>{localData.length} / 5</Text>
+				</View>
+				<Pressable
+					style={styles.stickyIcon}
+					onPress={(event) => console.log('Clicked!!!')}
+					disabled={localData.length >= 5 ? true : false}
+				>
+					<AntDesign
+						name="pluscircle"
+						size={48}
+						color={localData.length >= 5 ? 'grey' : 'white'}
+						style={styles.shadowEffects}
+					/>
+				</Pressable>
 			</View>
 		);
 	}
@@ -101,5 +120,25 @@ const styles = StyleSheet.create({
 		marginBottom: 20,
 		borderRadius: 12,
 		backgroundColor: 'white',
+	},
+	stickyIcon: {
+		position: 'absolute',
+		marginLeft: 50,
+		left: SCREEN_DIMENSIONS.width / 1.5,
+		top: SCREEN_DIMENSIONS.height / 1.15,
+	},
+	shadowEffects: {
+		borderRadius: 32,
+		// Shadow properites - iOS
+		shadowColor: 'black',
+		shadowOffset: {
+			width: 0,
+			height: 10,
+		},
+		shadowOpacity: 0.32,
+		shadowRadius: 15,
+
+		// Shadow properties - Android
+		elevation: 10,
 	},
 });

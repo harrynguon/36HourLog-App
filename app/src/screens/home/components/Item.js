@@ -1,21 +1,23 @@
 import * as React from 'react';
-import { Text, TextInput, View, StyleSheet, Dimensions } from 'react-native';
+import { Text, TextInput, View, StyleSheet, Dimensions, Pressable } from 'react-native';
 
-const SPACING = 20;
+const SPACING = 15;
 const SCREEN_DIMENSIONS = Dimensions.get('screen');
 
 const Item = ({ item }) => {
 	console.log(item);
 	return (
-		<View style={styles.item}>
-			<View style={{ flex: 0.75 }}>
-				<Text style={{ fontWeight: 'bold' }}>{item['Description']}</Text>
+		<Pressable onPress={(event) => console.log(event)}>
+			<View style={styles.item}>
+				<View style={{ flex: 0.75 }}>
+					<Text style={{ fontWeight: 'bold' }}>{item['Description']}</Text>
+				</View>
+				<View style={{ flexDirection: 'column', flex: 0.25 }}>
+					<Text>Expires in</Text>
+					<Text style={{ fontWeight: 'bold' }}>{item['ExpiryDate']}</Text>
+				</View>
 			</View>
-			<View style={{ flexDirection: 'column', flex: 0.25 }}>
-				<Text>Expires in</Text>
-				<Text style={{ fontWeight: 'bold' }}>{item['ExpiryDate']}</Text>
-			</View>
-		</View>
+		</Pressable>
 	);
 };
 

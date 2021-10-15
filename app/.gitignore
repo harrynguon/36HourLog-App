@@ -12,5 +12,5 @@ web-build/
 # macOS
 .DS_Store
 
-# API key (temp) - TODO: Cognito auth
+# Environment variables
 .env
