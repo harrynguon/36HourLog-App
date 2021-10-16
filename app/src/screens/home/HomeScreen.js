@@ -84,7 +84,7 @@ const HomeScreen = () => {
 				<Pressable
 					style={styles.stickyIcon}
 					onPress={(event) => console.log('Clicked!!!')}
-					disabled={localData.length >= 5 ? true : false}
+					disabled={localData.length >= 5}
 				>
 					<AntDesign
 						name="pluscircle"
