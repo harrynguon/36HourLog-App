@@ -1,16 +1,12 @@
 import * as React from 'react';
-import { Text, TextInput, View, StyleSheet, Dimensions, Pressable } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, Pressable } from 'react-native';
 
 const SPACING = 15;
 const SCREEN_DIMENSIONS = Dimensions.get('screen');
 
 const Item = ({ item, navigation }) => {
-	console.log(item);
 	return (
-		<Pressable
-			onPress={(event) => navigation.navigate('EditItem', { item: item })}
-			style={{ backgroundColor: 'green' }}
-		>
+		<Pressable onPress={(event) => navigation.navigate('EditItem', { item: item })}>
 			<View style={styles.item}>
 				<View style={{ flex: 0.75 }}>
 					<Text style={{ fontWeight: 'bold' }}>{item['Description']}</Text>

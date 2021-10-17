@@ -13,7 +13,7 @@ export const GoBackButton = ({ navigation }) => (
 const styles = StyleSheet.create({
 	stickyIcon: {
 		position: 'absolute',
-		marginLeft: 50,
+		left: SCREEN_DIMENSIONS.width / 10,
 		top: SCREEN_DIMENSIONS.height / 1.15,
 	},
 	shadowEffects: {

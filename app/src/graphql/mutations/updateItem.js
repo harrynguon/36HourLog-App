@@ -1,8 +1,8 @@
 import { gql } from 'graphql-tag';
 
 export default gql(`
-	mutation updateItem {
-  		updateItem(item: {Description: "Heya", DeviceID: "Harry1", ExpiryDate: "20224"}) {
+	mutation updateItem($DeviceID: String!, $ExpiryDate: String!, $Description: String!) {
+  		updateItem(item: {DeviceID: $DeviceID, ExpiryDate: $ExpiryDate, Description: $Description}) {
 	 		Description
 	 		DeviceID
 	 		ExpiryDate

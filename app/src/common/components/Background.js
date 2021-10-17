@@ -4,9 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const SCREEN_DIMENSIONS = Dimensions.get('screen');
 
-const Background = () => (
-	<LinearGradient colors={['#D16BA5', '#86A8E7', '#5FFBF1']} style={styles.background} />
-);
+const Background = ({ colours }) => <LinearGradient colors={colours} style={styles.background} />;
 
 export default Background;
 

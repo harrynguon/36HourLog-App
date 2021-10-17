@@ -1,7 +1,6 @@
 import React from 'react';
 import HomeScreen from './src/screens/home/HomeScreen';
 import { useFonts, SourceSansPro_400Regular } from '@expo-google-fonts/source-sans-pro';
-import { StatusBar } from 'expo-status-bar';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { ApolloLink } from 'apollo-link';
 import { AUTH_TYPE } from 'aws-appsync';
@@ -12,6 +11,9 @@ import LoadingIndicator from './src/common/components/LoadingIndicator';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { EditItemScreen } from './src/screens/edit_item/EditItemScreen';
+import { withHiddenStatusBar } from './src/common/components/HiddenStatusBar';
+
+// delete react-apollo, react-native-paper
 
 const Stack = createNativeStackNavigator();
 
@@ -45,9 +47,10 @@ export default function App() {
 							headerShown: false,
 						}}
 						initialRouteName={'Home'}
+						animationEnabled
 					>
-						<Stack.Screen name="Home" component={HomeScreen} />
-						<Stack.Screen name="EditItem" component={EditItemScreen} />
+						<Stack.Screen name="Home" component={withHiddenStatusBar(HomeScreen)} />
+						<Stack.Screen name="EditItem" component={withHiddenStatusBar(EditItemScreen)} />
 					</Stack.Navigator>
 				</NavigationContainer>
 			</ApolloProvider>

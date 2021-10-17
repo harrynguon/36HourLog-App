@@ -1,8 +1,8 @@
 import { gql } from 'graphql-tag';
 
 export default gql(`
-	mutation delete {
-		deleteItem(item: {Description: "s", DeviceID: "Harry1", ExpiryDate: "2024"}) {
+	mutation deleteItem($DeviceID: String!, $ExpiryDate: String!, $Description: String!) {
+		deleteItem(item: {DeviceID: $DeviceID, ExpiryDate: $ExpiryDate, Description: $Description}) {
 			Description
 			DeviceID
 			ExpiryDate

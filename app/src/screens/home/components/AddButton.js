@@ -4,10 +4,10 @@ import { AntDesign } from '@expo/vector-icons';
 
 const SCREEN_DIMENSIONS = Dimensions.get('screen');
 
-export const AddButton = ({ localData, navigation }) => (
+export const AddButton = ({ localData, setModalVisible, navigation }) => (
 	<Pressable
 		style={styles.stickyIcon}
-		onPress={(event) => console.log(pressed)}
+		onPress={(event) => setModalVisible(true)}
 		disabled={localData.length >= 5}
 	>
 		<AntDesign
@@ -22,8 +22,7 @@ export const AddButton = ({ localData, navigation }) => (
 const styles = StyleSheet.create({
 	stickyIcon: {
 		position: 'absolute',
-		marginLeft: 50,
-		left: SCREEN_DIMENSIONS.width / 1.5,
+		left: SCREEN_DIMENSIONS.width / 1.2,
 		top: SCREEN_DIMENSIONS.height / 1.15,
 	},
 	shadowEffects: {

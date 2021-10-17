@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, FlatList, Dimensions, StatusBar } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import Item from './components/Item';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
@@ -9,14 +8,15 @@ import ListItems from '../../graphql/queries/listItems';
 import LoadingIndicator from '../../common/components/LoadingIndicator';
 import { AddButton } from './components/AddButton';
 import Background from '../../common/components/Background';
+import { AddNewItemModal } from './components/AddNewItemModal';
 
 const SCREEN_DIMENSIONS = Dimensions.get('screen');
 
 const HomeScreen = ({ navigation }) => {
 	const [quoteOfTheDay, setQuoteOfTheDay] = useState('');
 	const [quoteOfTheDayAuthor, setQuoteOfTheDayAuthor] = useState('');
-
 	const [localData, setLocalData] = useState([]);
+	const [modalVisible, setModalVisible] = useState(false);
 
 	const { loading, error, data } = useQuery(ListItems);
 
@@ -25,10 +25,6 @@ const HomeScreen = ({ navigation }) => {
 			setLocalData(data.listItems.Items);
 		}
 	}, [data]);
-
-	if (error) {
-		console.log(error);
-	}
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -57,22 +53,32 @@ const HomeScreen = ({ navigation }) => {
 	} else {
 		return (
 			<View style={styles.container}>
-				<Background />
+				<Background colours={['#D16BA5', '#86A8E7', '#5FFBF1']} />
 				<View style={styles.quoteOfTheDayContainer}>
 					<Text style={{ textDecorationLine: 'underline' }}>Quote of the Day: </Text>
 					<Text style={{ fontStyle: 'italic' }} numberOfLines={4}>
 						{quoteOfTheDay} - {quoteOfTheDayAuthor}
 					</Text>
 				</View>
+
 				<FlatList
 					data={localData}
 					renderItem={(item) => <Item item={item.item} navigation={navigation} />}
 					keyExtractor={(item, index) => item['ExpiryDate']}
 				/>
-				<View style={{ marginBottom: 5 }}>
+
+				<AddNewItemModal
+					visible={modalVisible}
+					onRequestClose={() => {
+						setModalVisible(!modalVisible);
+					}}
+					closeModal={() => setModalVisible(!modalVisible)}
+				/>
+
+				<View style={{ marginBottom: 15 }}>
 					<Text>{localData.length} / 5</Text>
 				</View>
-				<AddButton localData={localData} />
+				<AddButton localData={localData} setModalVisible={setModalVisible} />
 			</View>
 		);
 	}
