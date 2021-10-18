@@ -1,20 +1,15 @@
 import * as React from 'react';
 import { Modal, Pressable, Text, TextInput, View, StyleSheet, Dimensions } from 'react-native';
 import { useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import createItem from '../../../graphql/mutations/createItem';
-import ListItems from '../../../graphql/queries/listItems';
 
 const SCREEN_DIMENSIONS = Dimensions.get('screen');
 
-export const AddNewItemModal = ({ visible, onRequestClose, closeModal }) => {
+export const AddNewItemModal = ({ visible, onRequestClose, closeModal, listItemsFunction }) => {
 	const [text, onChangeText] = useState('');
 
 	const [addItem, { data, loading, error }] = useMutation(createItem);
-
-	if (data) {
-		console.log(data);
-	}
 
 	return (
 		<Modal animationType="fade" transparent visible={visible} onRequestClose={onRequestClose}>
@@ -49,11 +44,10 @@ export const AddNewItemModal = ({ visible, onRequestClose, closeModal }) => {
 								addItem({
 									variables: {
 										DeviceID: 'Harry1',
-										ExpiryDate: '20202020',
+										ExpiryDate: new Date(new Date().setHours(new Date().getHours() + 36)),
 										Description: text,
 									},
-								}).then();
-								closeModal();
+								}).then((response) => closeModal());
 							}}
 						>
 							<Text style={{ fontWeight: 'bold', textAlign: 'center' }}>Done</Text>
