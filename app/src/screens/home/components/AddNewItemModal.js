@@ -6,7 +6,7 @@ import createItem from '../../../graphql/mutations/createItem';
 
 const SCREEN_DIMENSIONS = Dimensions.get('screen');
 
-export const AddNewItemModal = ({ visible, onRequestClose, closeModal, listItemsFunction }) => {
+export const AddNewItemModal = ({ visible, onRequestClose, closeModal, refetch }) => {
 	const [text, onChangeText] = useState('');
 
 	const [addItem, { data, loading, error }] = useMutation(createItem);
@@ -47,7 +47,11 @@ export const AddNewItemModal = ({ visible, onRequestClose, closeModal, listItems
 										ExpiryDate: new Date(new Date().setHours(new Date().getHours() + 36)),
 										Description: text,
 									},
-								}).then((response) => closeModal());
+								}).then((response) => {
+									closeModal();
+									onChangeText('');
+									refetch();
+								});
 							}}
 						>
 							<Text style={{ fontWeight: 'bold', textAlign: 'center' }}>Done</Text>

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, View, Text, FlatList, Dimensions, StatusBar } from 'react-native';
 import Item from './components/Item';
 import { useEffect, useState } from 'react';
-import { useLazyQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 
 import ListItems from '../../graphql/queries/listItems';
 import LoadingIndicator from '../../common/components/LoadingIndicator';
@@ -18,8 +18,7 @@ const HomeScreen = ({ navigation }) => {
 	const [localData, setLocalData] = useState([]);
 	const [modalVisible, setModalVisible] = useState(false);
 
-	// const { loading, error, data } = useQuery(ListItems);
-	const [listItems, { loading, error, data }] = useLazyQuery(ListItems);
+	const { loading, error, data, refetch } = useQuery(ListItems);
 
 	useEffect(() => {
 		if (data) {
@@ -46,12 +45,7 @@ const HomeScreen = ({ navigation }) => {
 			}
 		};
 
-		const listItemss = async () => {
-			await listItems();
-		};
-
 		fetchData();
-		listItemss();
 	}, []);
 
 	if (loading) {
@@ -69,7 +63,6 @@ const HomeScreen = ({ navigation }) => {
 
 				<FlatList
 					data={localData}
-					// data={data.listItems.Items}
 					renderItem={(item) => <Item item={item.item} navigation={navigation} />}
 					keyExtractor={(item, index) => item['ExpiryDate']}
 				/>
@@ -80,7 +73,7 @@ const HomeScreen = ({ navigation }) => {
 						setModalVisible(!modalVisible);
 					}}
 					closeModal={() => setModalVisible(!modalVisible)}
-					listItemsFunction={listItems}
+					refetch={refetch}
 				/>
 
 				<View style={{ marginBottom: 15 }}>
