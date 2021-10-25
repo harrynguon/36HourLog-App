@@ -4,9 +4,11 @@ import { Text, View, StyleSheet, Dimensions, Pressable } from 'react-native';
 const SPACING = 15;
 const SCREEN_DIMENSIONS = Dimensions.get('screen');
 
-const Item = ({ item, navigation }) => {
+const Item = ({ item, navigation, refetch }) => {
 	return (
-		<Pressable onPress={(event) => navigation.navigate('EditItem', { item: item })}>
+		<Pressable
+			onPress={(event) => navigation.navigate('EditItem', { item: item, refetch: refetch })}
+		>
 			<View style={styles.item}>
 				<View style={{ flex: 0.75 }}>
 					<Text style={{ fontWeight: 'bold' }}>{item['Description']}</Text>

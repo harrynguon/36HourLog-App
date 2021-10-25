@@ -63,7 +63,9 @@ const HomeScreen = ({ navigation }) => {
 
 				<FlatList
 					data={localData}
-					renderItem={(item) => <Item item={item.item} navigation={navigation} />}
+					renderItem={(item) => (
+						<Item item={item.item} navigation={navigation} refetch={refetch} />
+					)}
 					keyExtractor={(item, index) => item['ExpiryDate']}
 				/>
 
@@ -79,6 +81,7 @@ const HomeScreen = ({ navigation }) => {
 				<View style={{ marginBottom: 15 }}>
 					<Text>{localData.length} / 5</Text>
 				</View>
+
 				<AddButton localData={localData} setModalVisible={setModalVisible} />
 			</View>
 		);

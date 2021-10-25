@@ -11,6 +11,10 @@ export const AddNewItemModal = ({ visible, onRequestClose, closeModal, refetch }
 
 	const [addItem, { data, loading, error }] = useMutation(createItem);
 
+	const addItemAsync = async (params) => {
+		await addItem(params);
+	};
+
 	return (
 		<Modal animationType="fade" transparent visible={visible} onRequestClose={onRequestClose}>
 			<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -40,17 +44,17 @@ export const AddNewItemModal = ({ visible, onRequestClose, closeModal, refetch }
 						</Pressable>
 						<Pressable
 							style={[styles.addEntryModalButton, { backgroundColor: 'lightgreen' }]}
-							onPress={(event) => {
-								addItem({
+							onPress={async (event) => {
+								await addItemAsync({
 									variables: {
 										DeviceID: 'Harry1',
 										ExpiryDate: new Date(new Date().setHours(new Date().getHours() + 36)),
 										Description: text,
 									},
-								}).then((response) => {
-									closeModal();
-									onChangeText('');
-									refetch();
+								}).then(async (response) => {
+									await closeModal();
+									await onChangeText('');
+									await refetch();
 								});
 							}}
 						>
