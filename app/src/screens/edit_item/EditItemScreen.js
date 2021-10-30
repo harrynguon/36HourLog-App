@@ -9,6 +9,7 @@ import {
 	Dimensions,
 	Pressable,
 	TextInput,
+	DeviceEventEmitter,
 } from 'react-native';
 import Background from '../../common/components/Background';
 import { GoBackButton } from './components/GoBackButton';
@@ -18,8 +19,8 @@ import updateItem from '../../graphql/mutations/updateItem';
 
 const SCREEN_DIMENSIONS = Dimensions.get('screen');
 
-export const EditItemScreen = ({ route, navigation, refetcher }) => {
-	const [updateItemFn, { refetch }] = useMutation(updateItem);
+export const EditItemScreen = ({ route, navigation }) => {
+	const [updateItemFn] = useMutation(updateItem);
 	const updateItemAsync = async (params) => {
 		await updateItemFn(params);
 	};
@@ -45,12 +46,12 @@ export const EditItemScreen = ({ route, navigation, refetcher }) => {
 					onSubmitEditing={async (event) => {
 						await updateItemAsync({
 							variables: {
-								DeviceID: 'Harry1',
+								DeviceID: DeviceID,
 								ExpiryDate: ExpiryDate,
 								Description: editedDescription,
 							},
 						}).then(async (response) => {
-							await refetch();
+							DeviceEventEmitter.emit('event.refetchData', {});
 						});
 					}}
 					style={styles.textInput}

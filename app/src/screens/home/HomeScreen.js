@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, FlatList, Dimensions, StatusBar } from 'react-n
 import Item from './components/Item';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
+import { DeviceEventEmitter } from 'react-native';
 
 import ListItems from '../../graphql/queries/listItems';
 import LoadingIndicator from '../../common/components/LoadingIndicator';
@@ -19,6 +20,8 @@ const HomeScreen = ({ navigation }) => {
 	const [modalVisible, setModalVisible] = useState(false);
 
 	const { loading, error, data, refetch } = useQuery(ListItems);
+	// Allow other screens to call the refetch function
+	DeviceEventEmitter.addListener('event.refetchData', () => refetch());
 
 	useEffect(() => {
 		if (data) {
@@ -63,9 +66,7 @@ const HomeScreen = ({ navigation }) => {
 
 				<FlatList
 					data={localData}
-					renderItem={(item) => (
-						<Item item={item.item} navigation={navigation} refetch={refetch} />
-					)}
+					renderItem={(item) => <Item item={item.item} navigation={navigation} />}
 					keyExtractor={(item, index) => item['ExpiryDate']}
 				/>
 
