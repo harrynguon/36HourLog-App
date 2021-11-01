@@ -134,6 +134,8 @@ namespace ItemResolver.Infrastructure
             {
                 return null;
             }
+
+            itemFromApi.Description = item.Description;
             
             try
             {
