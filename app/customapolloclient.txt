@@ -1,0 +1,3 @@
+Creating a custom apollo client due to the AWS SDK's AppSync client not supporting the latest
+version of Apollo-client:
+https://stackoverflow.com/questions/60804372/proper-way-to-setup-awsappsyncclient-apollo-react

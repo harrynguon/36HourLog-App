@@ -13,8 +13,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { EditItemScreen } from './src/screens/edit_item/EditItemScreen';
 import { withHiddenStatusBar } from './src/common/components/HiddenStatusBar';
 
-// delete react-apollo, react-native-paper
-
 const Stack = createNativeStackNavigator();
 
 export default function App() {
