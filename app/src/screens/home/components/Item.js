@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, Dimensions, Pressable } from 'react-native';
+import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
 
 const SPACING = 15;
 const SCREEN_DIMENSIONS = Dimensions.get('screen');
@@ -37,12 +37,12 @@ const styles = StyleSheet.create({
 		shadowColor: 'black',
 		shadowOffset: {
 			width: 0,
-			height: 10,
+			height: 10
 		},
 		shadowOpacity: 0.32,
 		shadowRadius: 15,
 
 		// Shadow properties - Android
-		elevation: 10,
-	},
+		elevation: 10
+	}
 });

@@ -1,18 +1,18 @@
 variable "account_id" {
-  type = number
+	type = number
 }
 
 variable "app_name" {
-  type = string
-  default = "36-hours"
+	type    = string
+	default = "36-hours"
 }
 
 variable "tags" {
-  type = map(string)
+	type = map(string)
 
-  default = {
-    Owner = "Harry"
-    AppName = "36-hours-app"
-    ManagedBy = "Terraform"
-  }
+	default = {
+		Owner     = "Harry"
+		AppName   = "36-hours-app"
+		ManagedBy = "Terraform"
+	}
 }

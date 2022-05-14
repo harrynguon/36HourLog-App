@@ -6,7 +6,7 @@ const LoadingIndicator = ({ text }) => (
 	<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 		<ActivityIndicator style={{ marginBottom: 10 }} />
 		<Text>{text}</Text>
-		<StatusBar style="auto" />
+		<StatusBar style='auto' />
 	</View>
 );
 

@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, FlatList, Dimensions, StatusBar } from 'react-native';
-import Item from './components/Item';
 import { useEffect, useState } from 'react';
+import { DeviceEventEmitter, Dimensions, FlatList, StatusBar, StyleSheet, Text, View } from 'react-native';
+import Item from './components/Item';
 import { useQuery } from '@apollo/client';
-import { DeviceEventEmitter } from 'react-native';
 
 import ListItems from '../../graphql/queries/listItems';
 import LoadingIndicator from '../../common/components/LoadingIndicator';
@@ -96,13 +95,13 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		alignItems: 'center',
-		paddingTop: StatusBar.currentHeight || 60,
+		paddingTop: StatusBar.currentHeight || 60
 	},
 	quoteOfTheDayContainer: {
 		width: SCREEN_DIMENSIONS.width / 1.5,
 		padding: 10,
 		marginBottom: 20,
 		borderRadius: 12,
-		backgroundColor: 'white',
-	},
+		backgroundColor: 'white'
+	}
 });

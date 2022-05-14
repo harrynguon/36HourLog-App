@@ -11,7 +11,7 @@ import {
 	Subheading,
 	Text,
 	TextInput,
-	Title,
+	Title
 } from 'react-native-paper';
 import { gql } from 'graphql-tag';
 import { useQuery } from '@apollo/client';
@@ -24,8 +24,8 @@ const ListItem = ({ item, setModalVisible, setInputText, setListItemReference, s
 					backgroundColor: 'green',
 					width: '100%',
 					padding: 15,
-					margin: 3,
-				},
+					margin: 3
+				}
 			]}
 			description={item.description}
 			key={Math.random()}
@@ -129,7 +129,7 @@ const HomeScreen = () => {
 						contentContainerStyle={{ backgroundColor: 'blue', padding: 20 }}
 					>
 						<TextInput
-							label="Modify Text"
+							label='Modify Text'
 							value={inputText}
 							onChangeText={(text) => {
 								handleUpdateText(text);
@@ -138,9 +138,9 @@ const HomeScreen = () => {
 						/>
 						<View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
 							<Button
-								icon="delete"
-								color="red"
-								mode="contained"
+								icon='delete'
+								color='red'
+								mode='contained'
 								style={{ marginTop: -5 }}
 								onPress={(event) => {
 									const itemToDelete = listItemReference;
@@ -164,7 +164,7 @@ const HomeScreen = () => {
 								let itemsCopy = [...items];
 								itemsCopy.push({
 									description: addNewModalText,
-									expiryDate: new Date(new Date().setHours(new Date().getHours() + 36)),
+									expiryDate: new Date(new Date().setHours(new Date().getHours() + 36))
 								});
 								setItems(itemsCopy);
 								setAddNewModalText('');
@@ -174,7 +174,7 @@ const HomeScreen = () => {
 						contentContainerStyle={{ backgroundColor: 'yellow', padding: 20 }}
 					>
 						<TextInput
-							label="Add a new item"
+							label='Add a new item'
 							value={addNewModalText}
 							onChangeText={(text) => {
 								setAddNewModalText(text);
@@ -197,7 +197,7 @@ const HomeScreen = () => {
 								if (snapshot !== listItemReference.description) {
 									handleUpdateText(snapshot, false);
 								}
-							},
+							}
 						}}
 					>
 						Undo changes?
@@ -213,7 +213,7 @@ const HomeScreen = () => {
 								itemsCopy.push(deleteItemSnapshotToRestore);
 								itemsCopy = itemsCopy.sort((a, b) => a.expiryDate - b.expiryDate);
 								setItems(itemsCopy);
-							},
+							}
 						}}
 					>
 						Undo deletion?
@@ -239,39 +239,39 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
 	maxWidth: {
-		width: '100%',
+		width: '100%'
 	},
 	container: {
 		flex: 1,
 		flexDirection: 'column',
 		justifyContent: 'flex-start',
 		alignItems: 'center',
-		backgroundColor: 'cyan',
+		backgroundColor: 'cyan'
 	},
 	headerContainer: {
 		backgroundColor: 'red',
 		flexDirection: 'column',
 		justifyContent: 'center',
 		alignItems: 'center',
-		height: '15%',
+		height: '15%'
 	},
 	contentContainer: {
 		flexDirection: 'column',
 		justifyContent: 'center',
 		alignItems: 'center',
 		height: '70%',
-		backgroundColor: 'grey',
+		backgroundColor: 'grey'
 	},
 	footerContainer: {
 		flexDirection: 'column',
 		justifyContent: 'center',
 		alignItems: 'center',
 		height: '15%',
-		backgroundColor: 'purple',
+		backgroundColor: 'purple'
 	},
 	listRightSide: {
 		flexDirection: 'column',
 		justifyContent: 'center',
-		alignItems: 'center',
-	},
+		alignItems: 'center'
+	}
 });

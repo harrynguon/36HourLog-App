@@ -1,29 +1,29 @@
 namespace ItemResolver.Core.Model
 {
-    public static class Constants
-    {
-        public const string TableName = "36-hours-table";
-        public const string DeviceId = "DeviceID";
-        public const string ExpiryDate = "ExpiryDate";
-        public const string Description = "Description";
-    }
+	public static class Constants
+	{
+		public const string TableName = "36-hours-table";
+		public const string DeviceId = "DeviceID";
+		public const string ExpiryDate = "ExpiryDate";
+		public const string Description = "Description";
+	}
 
-    public static class Queries
-    {
-        public const string GetItem = "getItem";
-        public const string ListItems = "listItems";
-    }
+	public static class Queries
+	{
+		public const string GetItem = "getItem";
+		public const string ListItems = "listItems";
+	}
 
-    public static class Mutations
-    {
-        public const string CreateItem = "createItem";
-        public const string DeleteItem = "deleteItem";
-        public const string UpdateItem = "updateItem";
-    }
+	public static class Mutations
+	{
+		public const string CreateItem = "createItem";
+		public const string DeleteItem = "deleteItem";
+		public const string UpdateItem = "updateItem";
+	}
 
-    public static class Operators
-    {
-        public const string Equals = "EQ";
-        public const string NotEquals = "NE";
-    }
+	public static class Operators
+	{
+		public const string Equals = "EQ";
+		public const string NotEquals = "NE";
+	}
 }

@@ -1,15 +1,15 @@
 variable "account_id" {
-  type = string
+	type = string
 }
 
 variable "region" {
-  type = string
+	type = string
 }
 
 variable "app_name" {
-  type = string
+	type = string
 }
 
 variable "tags" {
-  type = map(string)
+	type = map(string)
 }

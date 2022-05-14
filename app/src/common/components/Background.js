@@ -15,6 +15,6 @@ const styles = StyleSheet.create({
 		right: 0,
 		top: 0,
 		width: SCREEN_DIMENSIONS.width,
-		height: SCREEN_DIMENSIONS.height,
-	},
+		height: SCREEN_DIMENSIONS.height
+	}
 });

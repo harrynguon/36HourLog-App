@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Modal, Pressable, Text, TextInput, View, StyleSheet, Dimensions } from 'react-native';
 import { useState } from 'react';
+import { Dimensions, Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useMutation } from '@apollo/client';
 import createItem from '../../../graphql/mutations/createItem';
 
@@ -16,7 +16,7 @@ export const AddNewItemModal = ({ visible, onRequestClose, closeModal, refetch }
 	};
 
 	return (
-		<Modal animationType="fade" transparent visible={visible} onRequestClose={onRequestClose}>
+		<Modal animationType='fade' transparent visible={visible} onRequestClose={onRequestClose}>
 			<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 				<View style={styles.addEntryModal}>
 					<Text style={{ marginBottom: 15, textAlign: 'center', fontWeight: 'bold' }}>
@@ -25,7 +25,7 @@ export const AddNewItemModal = ({ visible, onRequestClose, closeModal, refetch }
 					<TextInput
 						style={styles.modalInputText}
 						onChangeText={onChangeText}
-						placeholder="I will do this..."
+						placeholder='I will do this...'
 						placeholderTextColor={'grey'}
 						value={text}
 					/>
@@ -33,7 +33,7 @@ export const AddNewItemModal = ({ visible, onRequestClose, closeModal, refetch }
 						style={{
 							flexDirection: 'row',
 							justifyContent: 'space-between',
-							margin: 10,
+							margin: 10
 						}}
 					>
 						<Pressable
@@ -49,8 +49,8 @@ export const AddNewItemModal = ({ visible, onRequestClose, closeModal, refetch }
 									variables: {
 										DeviceID: 'Harry1',
 										ExpiryDate: new Date(new Date().setHours(new Date().getHours() + 36)),
-										Description: text,
-									},
+										Description: text
+									}
 								}).then(async (response) => {
 									await closeModal();
 									await onChangeText('');
@@ -78,18 +78,18 @@ const styles = StyleSheet.create({
 		shadowColor: '#000',
 		shadowOffset: {
 			width: 0,
-			height: 2,
+			height: 2
 		},
 		shadowOpacity: 0.25,
 		shadowRadius: 4,
-		elevation: 5,
+		elevation: 5
 	},
 	addEntryModalButton: {
 		borderRadius: 10,
 		padding: 10,
 		paddingHorizontal: 15,
 		elevation: 2,
-		marginHorizontal: 10,
+		marginHorizontal: 10
 	},
 	modalInputText: {
 		width: 150,
@@ -97,6 +97,6 @@ const styles = StyleSheet.create({
 		height: 40,
 		margin: 12,
 		borderWidth: 1,
-		padding: 10,
-	},
+		padding: 10
+	}
 });

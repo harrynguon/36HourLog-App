@@ -1,173 +1,166 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
-using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2.Model;
-using Amazon.Internal;
 using Amazon.Lambda.Core;
 using Amazon.Runtime;
 using ItemResolver.Core.Interface;
 using ItemResolver.Core.Model;
 using ItemResolver.Core.Util;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using Filter = ItemResolver.Core.Model.Filter;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace ItemResolver.Infrastructure
 {
-    public class DynamoDbClient : IDynamoDbClient
-    {
+	public class DynamoDbClient : IDynamoDbClient
+	{
+		private readonly AmazonDynamoDBClient _client;
+		private readonly IConfigurationService _configurationService;
+		private readonly DynamoDBContext _context;
 
-        private readonly IConfigurationService _configurationService;
+		public DynamoDbClient(IConfigurationService configurationService)
+		{
+			_configurationService = configurationService;
 
-        private AmazonDynamoDBClient _client;
-        private DynamoDBContext _context;
+			var key = _configurationService.GetConfiguration()
+				.GetValue<string>("ProgrammaticAccess")
+				.Split(":");
 
-        public DynamoDbClient(IConfigurationService configurationService)
-        {
-            _configurationService = configurationService;
+			var credentials =
+				new BasicAWSCredentials(key[0], key[1]);
+			var config = new AmazonDynamoDBConfig
+			{
+				RegionEndpoint = RegionEndpoint.APSoutheast2
+			};
+			var dynamoDbClient = new AmazonDynamoDBClient(credentials, config);
 
-            var key = _configurationService.GetConfiguration()
-                .GetValue<string>("ProgrammaticAccess")
-                .Split(":");
-            
-            var credentials =
-                new BasicAWSCredentials(key[0], key[1]);
-            var config = new AmazonDynamoDBConfig
-            {
-                RegionEndpoint = RegionEndpoint.APSoutheast2
-            };
-            var dynamoDbClient = new AmazonDynamoDBClient(credentials, config);
+			_client = dynamoDbClient;
+			_context = new DynamoDBContext(_client);
+		}
 
-            _client = dynamoDbClient;
-            _context = new DynamoDBContext(_client);
-        }
-        
-        /// <summary>
-        /// Uses Low-level client API to retrieve only the attributes from the DB that is requested by the client.
-        /// </summary>
-        /// <param name="inputArguments"></param>
-        /// <param name="attributeSet"></param>
-        /// <returns></returns>
-        public async Task<Item> GetItem(Item item, string attributeSet)
-        {
-            var request = new GetItemRequest
-            {
-                TableName = Constants.TableName,
-                Key = new Dictionary<string, AttributeValue>
-                {
-                    {
-                        $"{Constants.DeviceId}", new AttributeValue {S = item.DeviceId}
-                    },
-                    {
-                        $"{Constants.ExpiryDate}", new AttributeValue {S = item.ExpiryDate}
-                    }
-                },
-                ProjectionExpression = attributeSet,
-                ConsistentRead = true
-            };
+		/// <summary>
+		///   Uses Low-level client API to retrieve only the attributes from the DB that is requested by the client.
+		/// </summary>
+		/// <param name="inputArguments"></param>
+		/// <param name="attributeSet"></param>
+		/// <returns></returns>
+		public async Task<Item> GetItem(Item item, string attributeSet)
+		{
+			var request = new GetItemRequest
+			{
+				TableName = Constants.TableName,
+				Key = new Dictionary<string, AttributeValue>
+				{
+					{
+						$"{Constants.DeviceId}", new AttributeValue { S = item.DeviceId }
+					},
+					{
+						$"{Constants.ExpiryDate}", new AttributeValue { S = item.ExpiryDate }
+					}
+				},
+				ProjectionExpression = attributeSet,
+				ConsistentRead = true
+			};
 
-            var response = await _client.GetItemAsync(request);
+			var response = await _client.GetItemAsync(request);
 
-            if (!response.IsItemSet)
-            {
-                return null;
-            }
-            
-            return Utilities.MapToItem(response.Item);
-        }
+			if (!response.IsItemSet)
+			{
+				return null;
+			}
 
-        /// <summary>
-        /// Uses Low-level client API to retrieve only the attributes from the DB that is requested by the client.
-        /// </summary>
-        /// <param name="filterArguments"></param>
-        /// <param name="attributeSet"></param>
-        /// <returns></returns>
-        public async Task<List<Item>> ListItems(Filter filterArguments, string attributeSet)
-        {
-            var arithmeticOperator = filterArguments.FilterOperator == Operators.NotEquals
-                ? "<>" : "=";
-            var scanRequest = new ScanRequest
-            {
-                TableName = Constants.TableName,
-                ExpressionAttributeValues = new Dictionary<string, AttributeValue>
-                {
-                    {
-                        $":{Constants.DeviceId}", new AttributeValue { S = filterArguments.DeviceId }
-                    }  
-                },
-                FilterExpression = $"{Constants.DeviceId} {arithmeticOperator} :{Constants.DeviceId}",
-                ProjectionExpression = attributeSet,
-                ConsistentRead = true
-            };
+			return Utilities.MapToItem(response.Item);
+		}
 
-            var response = await _client.ScanAsync(scanRequest);
+		/// <summary>
+		///   Uses Low-level client API to retrieve only the attributes from the DB that is requested by the client.
+		/// </summary>
+		/// <param name="filterArguments"></param>
+		/// <param name="attributeSet"></param>
+		/// <returns></returns>
+		public async Task<List<Item>> ListItems(Filter filterArguments, string attributeSet)
+		{
+			var arithmeticOperator = filterArguments.FilterOperator == Operators.NotEquals
+				? "<>"
+				: "=";
+			var scanRequest = new ScanRequest
+			{
+				TableName = Constants.TableName,
+				ExpressionAttributeValues = new Dictionary<string, AttributeValue>
+				{
+					{
+						$":{Constants.DeviceId}", new AttributeValue { S = filterArguments.DeviceId }
+					}
+				},
+				FilterExpression = $"{Constants.DeviceId} {arithmeticOperator} :{Constants.DeviceId}",
+				ProjectionExpression = attributeSet,
+				ConsistentRead = true
+			};
 
-            return Utilities.MapToItem(response.Items);
-        }
+			var response = await _client.ScanAsync(scanRequest);
 
-        public async Task<Item> CreateItem(Item item)
-        {
-            try
-            {
-                await _context.SaveAsync(item);
-            }
-            catch (Exception e)
-            {
-                LambdaLogger.Log(e.Message);
-                return null;
-            }
+			return Utilities.MapToItem(response.Items);
+		}
 
-            return item;
-        }
+		public async Task<Item> CreateItem(Item item)
+		{
+			try
+			{
+				await _context.SaveAsync(item);
+			}
+			catch (Exception e)
+			{
+				LambdaLogger.Log(e.Message);
+				return null;
+			}
 
-        public async Task<Item> UpdateItem(Item item)
-        {
-            var itemFromApi = await _context.LoadAsync(item);
-            if (itemFromApi == null)
-            {
-                return null;
-            }
+			return item;
+		}
 
-            itemFromApi.Description = item.Description;
-            
-            try
-            {
-                await _context.SaveAsync(itemFromApi);
-            }
-            catch (Exception e)
-            {
-                LambdaLogger.Log(e.Message);
-                return null;
-            }
+		public async Task<Item> UpdateItem(Item item)
+		{
+			var itemFromApi = await _context.LoadAsync(item);
+			if (itemFromApi == null)
+			{
+				return null;
+			}
 
-            return itemFromApi;
-        }
+			itemFromApi.Description = item.Description;
 
-        public async Task<Item> DeleteItem(Item item)
-        {
-            var itemFromApi = await _context.LoadAsync(item);
-            if (itemFromApi == null)
-            {
-                return null;
-            }
-            try
-            {
-                await _context.DeleteAsync(itemFromApi);
-            }
-            catch (Exception e)
-            {
-                LambdaLogger.Log(e.Message);
-                return null;
-            }
-            
-            return itemFromApi;
-        }
-    }
+			try
+			{
+				await _context.SaveAsync(itemFromApi);
+			}
+			catch (Exception e)
+			{
+				LambdaLogger.Log(e.Message);
+				return null;
+			}
+
+			return itemFromApi;
+		}
+
+		public async Task<Item> DeleteItem(Item item)
+		{
+			var itemFromApi = await _context.LoadAsync(item);
+			if (itemFromApi == null)
+			{
+				return null;
+			}
+
+			try
+			{
+				await _context.DeleteAsync(itemFromApi);
+			}
+			catch (Exception e)
+			{
+				LambdaLogger.Log(e.Message);
+				return null;
+			}
+
+			return itemFromApi;
+		}
+	}
 }

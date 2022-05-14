@@ -1,16 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import {
-	View,
-	Text,
-	Button,
-	StyleSheet,
-	StatusBar,
-	Dimensions,
-	Pressable,
-	TextInput,
-	DeviceEventEmitter,
-} from 'react-native';
+import { DeviceEventEmitter, Dimensions, Pressable, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native';
 import Background from '../../common/components/Background';
 import { GoBackButton } from './components/GoBackButton';
 import { useMutation } from '@apollo/client';
@@ -48,8 +38,8 @@ export const EditItemScreen = ({ route, navigation }) => {
 							variables: {
 								DeviceID: DeviceID,
 								ExpiryDate: ExpiryDate,
-								Description: editedDescription,
-							},
+								Description: editedDescription
+							}
 						}).then(async (response) => {
 							DeviceEventEmitter.emit('event.refetchData', {});
 						});
@@ -58,7 +48,8 @@ export const EditItemScreen = ({ route, navigation }) => {
 				/>
 			</View>
 			<Text>Expiry Date (UTC): {ExpiryDate}</Text>
-			<Pressable style={styles.deleteButton} onPress={(event) => {}}>
+			<Pressable style={styles.deleteButton} onPress={(event) => {
+			}}>
 				<Text>Delete</Text>
 			</Pressable>
 			<GoBackButton navigation={navigation} />
@@ -70,21 +61,21 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		alignItems: 'center',
-		paddingTop: StatusBar.currentHeight || 60,
+		paddingTop: StatusBar.currentHeight || 60
 	},
 	itemContainer: {
 		justifyContent: 'center',
 		width: SCREEN_DIMENSIONS.width / 1.2,
 		marginBottom: 15,
-		backgroundColor: 'white',
+		backgroundColor: 'white'
 	},
 	textInput: {
 		borderWidth: 1,
-		padding: 10,
+		padding: 10
 	},
 	deleteButton: {
 		justifyContent: 'flex-end',
 		width: '30%',
-		backgroundColor: 'white',
-	},
+		backgroundColor: 'white'
+	}
 });
